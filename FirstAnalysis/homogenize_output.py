@@ -20,7 +20,7 @@ def split_file(input_name):
     processing_time = time.time()
     print(" > Processing file", input_name)
     if g_verbose:
-        print("Homogenizing file", f"'{input_name}'", "for ML processing")
+        print("Homogenizing file", input_name, "for ML processing")
     f = TFile(input_name, "READ")
     if g_verbose:
         f.ls()
@@ -32,10 +32,14 @@ def split_file(input_name):
             fout = input_name.replace(".root", f"_sub{files_created}.root")
             fout = os.path.join(g_out_path, fout.split("/")[-1])
             if os.path.isfile(fout):
-                raise RuntimeError("File", fout, "already there!")
+                raise RuntimeError(f"File {fout} is already there!")
+            if not os.path.isdir(g_out_path):
+                if os.path.exists(g_out_path):
+                    raise RuntimeError(f"Path {g_out_path} exists but is not a directory!")
+                os.makedirs(g_out_path)
             fout = TFile(fout, "RECREATE")
             if not fout.IsOpen():
-                raise RuntimeError("File", fout, "is not open!")
+                raise RuntimeError(f"File {fout} is not open!")
             if g_verbose:
                 print("Creating omogenized file to", fout)
             files_created += 1
@@ -71,7 +75,7 @@ def main(input_files, verbose=True, base_dir="TF_", out_path="", jobs=20):
     global g_base_dir
     g_base_dir = base_dir
 
-    print("Omogenizing", len(input_files), "files")
+    print("Homogenizing", len(input_files), "files")
     processing_time = time.time()
     with Pool(jobs) as p:
         p.map(split_file, input_files)
@@ -79,7 +83,7 @@ def main(input_files, verbose=True, base_dir="TF_", out_path="", jobs=20):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Omogenizer for ML processing")
+    parser = argparse.ArgumentParser(description="Homogenizer for ML processing")
     parser.add_argument("input_files", type=str, nargs="+", help="Input files")
     parser.add_argument(
         "--base_dir",
@@ -95,4 +99,4 @@ if __name__ == "__main__":
     )
     parser.add_argument("-v", action="store_true", help="Verbose mode")
     args = parser.parse_args()
-    main(args.input_files, verbose=args.v, base_dir=args.base_dir, jobs=args.jobs)
+    main(args.input_files, verbose=args.v, base_dir=args.base_dir, out_path=args.out_dir, jobs=args.jobs)
