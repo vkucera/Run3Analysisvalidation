@@ -17,6 +17,7 @@ NFILESPERJOB_O2=1       # O2
 NJOBSPARALLEL_O2=$(python3 -c "print(min(10, round($(nproc) / 2)))")
 
 JSONRUN3="dpl-config_run3.json"  # Run 3 tasks parameters
+JSONRUN3="dpl-config_test.json"  # Run 3 tasks parameters
 # Run 5 tasks parameters for open HF study
 JSONRUN5_HF="dpl-config_run5_hf.json"
 # Run 5 tasks parameters for onia studies:

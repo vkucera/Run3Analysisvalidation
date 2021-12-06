@@ -10,6 +10,15 @@ options:
 
 workflows:
 
+  # Hackathon
+
+  o2-analysis-hf-task-mini:
+    dependencies:
+      - o2-analysis-trackextension
+      - o2-analysis-pid-tpc-full
+      - o2-analysis-pid-tof-full
+    tables: [HFSELTRACK, HFTRACKIDXP2, HFSELCANDD0]
+
   # Skimming
 
   o2-analysis-hf-track-index-skims-creator: &skim_creator
