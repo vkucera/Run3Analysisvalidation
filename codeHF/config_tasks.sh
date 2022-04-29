@@ -16,9 +16,9 @@
 # Steps
 DOCLEAN=1           # Delete created files (before and after running tasks).
 DOCONVERT=1         # Convert AliESDs.root to AO2D.root.
-DOALI=1             # Run AliPhysics tasks.
+DOALI=0             # Run AliPhysics tasks.
 DOO2=1              # Run O2 tasks.
-DOPOSTPROCESS=1     # Run output postprocessing. (Comparison plots. Requires DOALI=1 and/or DOO2=1)
+DOPOSTPROCESS=0     # Run output postprocessing. (Comparison plots. Requires DOALI=1 and/or DOO2=1)
 
 # Disable incompatible steps.
 [ "$ISINPUTO2" -eq 1 ] && { DOCONVERT=0; DOALI=0; }
@@ -41,15 +41,15 @@ DOO2_PID_TOF=0      # pid-tof-full/alice3-pid-tof
 DOO2_PID_TOF_QA=0   # pid-tof-qa-mc
 DOO2_PID_BAYES=0    # pid-bayes
 # Vertexing
-DOO2_SKIM=1         # hf-track-index-skims-creator
-DOO2_CAND_2PRONG=1  # hf-candidate-creator-2prong
-DOO2_CAND_3PRONG=1  # hf-candidate-creator-3prong
-DOO2_CAND_CASC=0    # hf-candidate-creator-cascade
+DOO2_SKIM=0         # hf-track-index-skims-creator
+DOO2_CAND_2PRONG=0  # hf-candidate-creator-2prong
+DOO2_CAND_3PRONG=0  # hf-candidate-creator-3prong
+DOO2_CAND_CASC=1    # hf-candidate-creator-cascade
 DOO2_CAND_X=0       # hf-candidate-creator-x
 DOO2_CAND_CHIC=0    # hf-candidate-creator-chic
 DOO2_CAND_XICC=0    # hf-candidate-creator-xicc
 DOO2_CAND_BPLUS=0   # hf-candidate-creator-bplus
-DOO2_CAND_DSTAR=0   # hf-candidate-creator-dstar
+DOO2_CAND_DSTAR=1   # hf-candidate-creator-dstar
 # Selectors
 DOO2_SEL_D0=0       # hf-d0-candidate-selector
 DOO2_SEL_DS=0       # hf-ds-tokkpi-candidate-selector
@@ -63,10 +63,10 @@ DOO2_SEL_LCK0SP=0   # hf-lc-tok0sp-candidate-selector
 DOO2_SEL_XICC=0     # hf-xicc-topkpipi-candidate-selector
 DOO2_SEL_BPLUS=0    # hf-bplus-tod0pi-candidate-selector
 # User tasks
-DOO2_TASK_D0=1      # hf-task-d0
+DOO2_TASK_D0=0      # hf-task-d0
 DOO2_TASK_DS=0      # hf-task-ds
 DOO2_TASK_DPLUS=0   # hf-task-dplus
-DOO2_TASK_LC=1      # hf-task-lc
+DOO2_TASK_LC=0      # hf-task-lc
 DOO2_TASK_XIC=0     # hf-task-xic
 DOO2_TASK_JPSI=0    # hf-task-jpsi
 DOO2_TASK_X=0       # hf-task-x
@@ -95,10 +95,10 @@ DOO2_FDDCONV=0      # fdd-converter
 DOO2_TRKPROP=0      # track-propagation
 
 # Selection cuts
-APPLYCUTS_D0=1      # Apply D0 selection cuts.
+APPLYCUTS_D0=0      # Apply D0 selection cuts.
 APPLYCUTS_DS=0      # Apply Ds selection cuts.
 APPLYCUTS_DPLUS=0   # Apply D+ selection cuts.
-APPLYCUTS_LC=1      # Apply Λc selection cuts.
+APPLYCUTS_LC=0      # Apply Λc selection cuts.
 APPLYCUTS_XIC=0     # Apply Ξc selection cuts.
 APPLYCUTS_JPSI=0    # Apply J/ψ selection cuts.
 APPLYCUTS_X=0       # Apply X selection cuts.
@@ -108,9 +108,9 @@ APPLYCUTS_XICC=0    # Apply Ξcc selection cuts.
 APPLYCUTS_BPLUS=0   # Apply B+ selection cuts.
 
 SAVETREES=0         # Save O2 tables to trees.
-USEO2VERTEXER=1     # Use the O2 vertexer in AliPhysics.
+USEO2VERTEXER=0     # Use the O2 vertexer in AliPhysics.
 USEALIEVCUTS=1      # Use AliEventCuts in AliPhysics (as used by conversion task)
-DORATIO=1           # Plot histogram ratios in comparison.
+DORATIO=0           # Plot histogram ratios in comparison.
 
 ####################################################################################################
 

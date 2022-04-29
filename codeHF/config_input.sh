@@ -4,7 +4,7 @@
 # Input specification for runtest.sh
 # (Modifies input parameters.)
 
-INPUT_CASE=2            # Input case
+INPUT_CASE=20            # Input case
 
 NFILESMAX=1             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
 
@@ -15,6 +15,7 @@ NFILESPERJOB_O2=1       # O2
 
 # Maximum number of simultaneously running O2 jobs
 NJOBSPARALLEL_O2=$(python3 -c "print(min(10, round($(nproc) / 2)))")
+NJOBSPARALLEL_O2=100
 
 JSONRUN3="dpl-config_run3.json"  # Run 3 tasks parameters
 # Run 5 tasks parameters for open HF study
@@ -39,6 +40,16 @@ case $INPUT_CASE in
   1)
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, real"
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/real/LHC17p_pass1_CENT_woSDD";;
+  100)
+    INPUT_LABEL="Run 2, Pb-Pb real LHC15o"
+    INPUT_DIR="/data2/vkucera/alice"
+    INPUT_SYS="PbPb";;
+  1000)
+    INPUT_LABEL="Run 2, Pb-Pb real LHC15o"
+    INPUT_DIR="data/train_test/"
+    INPUT_SYS="PbPb"
+    INPUT_FILES="AO2D.root"
+    ISINPUTO2=1;;
   2) # reference
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, MC LHC18a4a2_cent"
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/sim/LHC18a4a2_cent/282099"
@@ -47,6 +58,13 @@ case $INPUT_CASE in
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, MC LHC18a4a2_cent"
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/sim/LHC18a4a2_cent/282341"
     ISMC=1;;
+  20)
+    INPUT_LABEL="Run 2, Pb-Pb real LHC15o"
+    INPUT_DIR="/data2/vkucera/alice/data/2015/LHC15o/000244918/pass5_lowIR/PWGZZ/Run3_Conversion/274_20220510-0928_child_1/AOD"
+    # INPUT_DIR="/data2/vkucera/alice/data/2015/LHC15o/000244918/pass5_lowIR/PWGZZ/Run3_Conversion/266_20220301-0930_child_1/AOD"
+    INPUT_FILES="AO2D.root"
+    INPUT_SYS="PbPb"
+    ISINPUTO2=1;;
   4)
     INPUT_LABEL="Run 2, Pb-Pb 5.02 TeV LHC15o, real"
     INPUT_DIR="$INPUT_BASE/Run2/PbPb_5.02TeV/real/LHC15o"

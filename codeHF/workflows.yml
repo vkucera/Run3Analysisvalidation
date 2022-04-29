@@ -31,8 +31,8 @@ workflows:
   # Candidate creators
 
   o2-analysis-hf-candidate-creator-2prong: &cand_creator
-    dependencies:
-      - o2-analysis-hf-track-index-skims-creator
+    # dependencies:
+      # - o2-analysis-hf-track-index-skims-creator
     tables:
       default: [HFCANDP2BASE, HFCANDP2EXT]
       mc: [HFCANDP2MCREC, HFCANDP2MCGEN]
@@ -46,7 +46,7 @@ workflows:
   o2-analysis-hf-candidate-creator-dstar: {}
 
   o2-analysis-hf-candidate-creator-cascade:
-    <<: *cand_creator
+    # <<: *cand_creator
     tables:
       default: [HFCANDCASCBASE, HFCANDCASCEXT]
       mc: [HFCANDCASCMCREC, HFCANDCASCMCGEN]
