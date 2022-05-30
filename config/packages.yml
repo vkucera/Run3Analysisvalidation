@@ -1,12 +1,12 @@
 ---
 ## aliBuild configuration template (default values used if absent) ##
-# aliBuild: # optional
+aliBuild: # optional
 #   dir_alice: "$HOME/alice" # build directory with repositories of aliBuild packages
 #   architecture: "" # system architecture, automatically determined by aliBuild if empty or absent
 #   options: "" # aliBuild command line options
-#   clean: 1 # Run aliBuild clean at the end.
-#   clean_aggressive: 0 # Use the '--aggressive-cleanup' option.
-#   clean_purge: 0 # Keep only the latest builds and delete the rest.
+  clean: 1 # Run aliBuild clean at the end.
+  clean_aggressive: 1 # Use the '--aggressive-cleanup' option.
+  clean_purge: 1 # Keep only the latest builds and delete the rest.
 
 repositories:
 
@@ -20,8 +20,13 @@ repositories:
   #   build: 0 # Build the package with aliBuild. Absent by default. If present, package is considered in the cleanup.
   #   build_opt: "--defaults o2" # aliBuild command line options, absent by default
 
+  alibuild:
+    update: 1
+    origin: "origin"
+
   alidist:
     update: 1
+    origin: "origin"
 
   AliPhysics:
     update: 1
@@ -41,3 +46,14 @@ repositories:
 
   Run3Analysisvalidation:
     update: 1
+    origin: "origin"
+
+  ALICE3_HFperformance:
+    update: 1
+    branch: "main"
+
+  megalinter:
+    update: 1
+    path: "$HOME/megalinter"
+    branch: "main"
+    origin: "origin"
