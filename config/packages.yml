@@ -57,3 +57,7 @@ repositories:
     path: "$HOME/megalinter"
     branch: "main"
     origin: "origin"
+
+  analysis-framework:
+    update: 1
+    origin: "origin"
