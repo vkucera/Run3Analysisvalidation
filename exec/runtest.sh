@@ -58,9 +58,10 @@ FILEOUT_TREES="AnalysisResults_trees.root"
 FILEOUT_TREES_O2="AnalysisResults_trees_O2.root"
 
 # Steering commands
-ENVALI="alienv setenv AliPhysics/latest -c"
-ENVO2="alienv setenv O2Physics/latest -c"
-ENVPOST="alienv setenv ROOT/latest -c"
+ARCH="ubuntu2004_x86-64"
+ENVALI="alienv -a $ARCH setenv AliPhysics/latest -c"
+ENVO2="alienv -a $ARCH setenv O2Physics/latest -c"
+ENVPOST="alienv -a $ARCH setenv ROOT/latest -c"
 
 # Step scripts
 SCRIPT_O2="script_o2.sh"

@@ -32,7 +32,7 @@ JSON="$JSONRUN3"
 # ISMC=0
 # JSON="$JSONRUN3"
 
-INPUT_BASE="/data2/data" # alicecerno2
+INPUT_BASE="/home/vit/alice/data" # alicecerno2
 
 case $INPUT_CASE in
   1)
@@ -41,9 +41,8 @@ case $INPUT_CASE in
     ;;
   2) # reference
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, MC LHC18a4a2_cent"
-    INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/sim/LHC18a4a2_cent/282099"
-    ISMC=1
-    ;;
+    INPUT_DIR="$INPUT_BASE/Run2/LHC18a4a2_cent/282099"
+    ISMC=1;;
   3)
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, MC LHC18a4a2_cent"
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/sim/LHC18a4a2_cent/282341"
