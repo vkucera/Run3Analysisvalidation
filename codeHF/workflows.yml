@@ -4,9 +4,10 @@ options:
   local:
     - "-b"
     - "--configuration json://$JSON"
-    - "--aod-memory-rate-limit 2000000000"
-    - "--shm-segment-size 16000000000"
+    - "--aod-memory-rate-limit 20000000000"
+    - "--shm-segment-size 160000000000"
     - "--min-failure-level error"
+    - "--aod-parent-base-path-replacement /home/vkucera/data/orig/001/"
 
 workflows:
 
@@ -31,7 +32,8 @@ workflows:
   # Candidate creators
 
   o2-analysis-hf-candidate-creator-2prong: &cand_creator
-    # dependencies:
+    dependencies:
+      - o2-analysis-hf-pvrefit-skim-converted
       # - o2-analysis-hf-track-index-skims-creator
     tables:
       default: [HFCANDP2BASE, HFCANDP2EXT]
@@ -47,6 +49,7 @@ workflows:
 
   o2-analysis-hf-candidate-creator-cascade:
     # <<: *cand_creator
+    dependencies: o2-analysis-lf-lambdakzerobuilder
     tables:
       default: [HFCANDCASCBASE, HFCANDCASCEXT]
       mc: [HFCANDCASCMCREC, HFCANDCASCMCGEN]
