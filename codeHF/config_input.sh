@@ -4,9 +4,9 @@
 # Input specification for runtest.sh
 # (Modifies input parameters.)
 
-INPUT_CASE=11            # Input case
+INPUT_CASE=12            # Input case
 
-NFILESMAX=1             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
+NFILESMAX=-0             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
 
 # Number of input files per job (Automatic optimisation on if < 1.)
 NFILESPERJOB_CONVERT=0  # Conversion
@@ -40,9 +40,10 @@ case $INPUT_CASE in
   1)
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, real"
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/real/LHC17p_pass1_CENT_woSDD";;
-  11)
+  12)
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, real"
     INPUT_DIR="/home/vkucera/data/small"
+    # INPUT_DIR="/home/vkucera/data/orig"
     INPUT_FILES="AO2D.root"
     ISINPUTO2=1;;
   100)
@@ -103,6 +104,11 @@ case $INPUT_CASE in
   10)
     INPUT_LABEL="Run 2, p-p 13 TeV, LHC17j (AO2D)"
     INPUT_DIR="$INPUT_BASE/Run2/pp_13TeV/real_converted/LHC17j_20220601" # converted good AO2Ds
+    INPUT_FILES="AO2D.root"
+    ISINPUTO2=1;;
+  11)
+    INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, real (AO2D)"
+    INPUT_DIR="/home/vkucera/data"
     INPUT_FILES="AO2D.root"
     ISINPUTO2=1;;
   esac

@@ -29,7 +29,7 @@ MAKE_GRAPH=0        # Make topology graph.
 
 # Activation of O2 workflows
 # Trigger selection
-DOO2_TRIGSEL=0      # event-selection
+DOO2_TRIGSEL=1      # event-selection
 # QA
 DOO2_REJ_ALICE3=0   # hf-qa-rejection
 DOO2_QA_EFF=0       # qa-efficiency
@@ -107,7 +107,7 @@ APPLYCUTS_LCK0SP=0  # Apply Λc → K0S p selection cuts.
 APPLYCUTS_XICC=0    # Apply Ξcc selection cuts.
 APPLYCUTS_BPLUS=0   # Apply B+ selection cuts.
 
-SAVETREES=0         # Save O2 tables to trees.
+SAVETREES=1         # Save O2 tables to trees.
 USEO2VERTEXER=0     # Use the O2 vertexer in AliPhysics.
 USEALIEVCUTS=1      # Use AliEventCuts in AliPhysics (as used by conversion task)
 DORATIO=0           # Plot histogram ratios in comparison.
