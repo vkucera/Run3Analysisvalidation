@@ -42,8 +42,17 @@ case $INPUT_CASE in
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/real/LHC17p_pass1_CENT_woSDD";;
   12)
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, real"
-    INPUT_DIR="/home/vkucera/data/small"
-    # INPUT_DIR="/home/vkucera/data/orig"
+    # INPUT_DIR="/home/vkucera/data/derived/first_test"
+    # INPUT_DIR="/home/vkucera/data/parent/first_test"
+    # INPUT_DIR="/home/vkucera/data/derived/hy_114372/0002"
+    # INPUT_DIR="/home/vkucera/data/derived/hy_114372/0001"
+    # INPUT_DIR="/home/vkucera/data/parent/hy_114372/0002"
+    # INPUT_DIR="/home/vkucera/data/parent/hy_114372/0001"
+    INPUT_DIR="/home/vkucera/data/parent/alice/data/2017/LHC17p/000282050"
+    # INPUT_DIR="/home/vkucera/data/derived/alice/data/2017/LHC17p/000282050"
+    # INPUT_DIR="/home/vkucera/data/parent/alice/data/2017/LHC17p/000282189"
+    # INPUT_DIR="/home/vkucera/data/derived/alice/data/2017/LHC17p/000282189"
+    # INPUT_DIR="/home/vkucera/data/parent/alice/data/2017/LHC17q/000282366" # train test input
     INPUT_FILES="AO2D.root"
     ISINPUTO2=1;;
   100)
@@ -66,7 +75,7 @@ case $INPUT_CASE in
     ISMC=1;;
   20)
     INPUT_LABEL="Run 2, Pb-Pb real LHC15o"
-    INPUT_DIR="/data2/vkucera/alice/data/2015/LHC15o/000244918/pass5_lowIR/PWGZZ/Run3_Conversion/274_20220510-0928_child_1/AOD"
+    INPUT_DIR="/data2/data/Run2/PbPb_5.02TeV/real_converted/LHC15o"
     # INPUT_DIR="/data2/vkucera/alice/data/2015/LHC15o/000244918/pass5_lowIR/PWGZZ/Run3_Conversion/266_20220301-0930_child_1/AOD"
     INPUT_FILES="AO2D.root"
     INPUT_SYS="PbPb"

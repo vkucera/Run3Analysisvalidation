@@ -3,7 +3,7 @@
     "internal-dpl-aod-reader": {
         "time-limit": "0",
         "aod-file": "@list_o2.txt",
-        "aod-parent-base-path-replacement": "alien:///alice/data/2017/LHC17p/000282314/pass2_FAST/PWGZZ/Run3_Conversion/297_20220624-2119_child_1/AOD;/home/vkucera/data/orig"
+        "aod-parent-base-path-replacement": "alien://;/home/vkucera/data/parent"
     },
     "internal-dpl-aod-spawner": "",
     "internal-dpl-aod-index-builder": "",

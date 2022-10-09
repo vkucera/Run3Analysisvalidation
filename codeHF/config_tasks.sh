@@ -41,9 +41,9 @@ DOO2_PID_TOF=0      # pid-tof-full/alice3-pid-tof
 DOO2_PID_TOF_QA=0   # pid-tof-qa-mc
 DOO2_PID_BAYES=0    # pid-bayes
 # Vertexing
-DOO2_SKIM=0         # hf-track-index-skims-creator
-DOO2_CAND_2PRONG=1  # hf-candidate-creator-2prong
-DOO2_CAND_3PRONG=1  # hf-candidate-creator-3prong
+DOO2_SKIM=1         # hf-track-index-skims-creator
+DOO2_CAND_2PRONG=0  # hf-candidate-creator-2prong
+DOO2_CAND_3PRONG=0  # hf-candidate-creator-3prong
 DOO2_CAND_CASC=0    # hf-candidate-creator-cascade
 DOO2_CAND_X=0       # hf-candidate-creator-x
 DOO2_CAND_CHIC=0    # hf-candidate-creator-chic
