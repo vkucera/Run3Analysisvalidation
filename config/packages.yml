@@ -61,3 +61,7 @@ repositories:
   analysis-framework:
     update: 1
     origin: "origin"
+
+  analysis-tutorials:
+    update: 1
+    origin: "origin"
