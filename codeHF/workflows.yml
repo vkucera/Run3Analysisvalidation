@@ -28,6 +28,15 @@ workflows:
   o2-analysis-track-to-collision-associator:
     tables: HFTRACKASSOC
 
+  # Tutorial
+
+  o2-analysistutorial-hf-task-mini:
+    dependencies:
+      - o2-analysis-track-dca_runX
+      - o2-analysis-pid-tpc-full
+      - o2-analysis-pid-tof-full_runX
+    tables: [HFSELTRACK, HFTRACKIDXP2, HFSELCANDD0]
+
   # Skimming
 
   o2-analysis-hf-track-index-skim-creator: &skim_creator
