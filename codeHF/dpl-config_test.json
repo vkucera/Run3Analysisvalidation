@@ -123,8 +123,8 @@
         "massWindow": "0.4"
     },
     "hf-task-d0": {
-        "flagSelCandD0": "1",
-        "flagSelCandD0bar": "1"
+        "selectionFlagD0": "0",
+        "selectionFlagD0bar": "0"
     },
     "internal-dpl-aod-global-analysis-file-sink": "",
     "internal-dpl-aod-writer": ""
