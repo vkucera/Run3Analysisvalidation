@@ -94,7 +94,7 @@
         "processWoSlice": "false",
         "processWoSliceDev": "false"
     },
-    "hf-track-index-skims-creator": {
+    "hf-track-index-skim-creator": {
         "magneticField": "5",
         "propToDCA": "true",
         "useAbsDCA": "true",
