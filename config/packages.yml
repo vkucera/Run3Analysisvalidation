@@ -27,10 +27,27 @@ repositories:
     update: 1
     build: 1
 
+  O2:
+    update: 1
+    build: 1
+    build_opt: "-j 4"
+
   O2Physics:
     update: 1
     build: 1
-    origin: "origin"
+    build_opt: "-j 4"
 
   Run3Analysisvalidation:
+    update: 1
+
+  alice-analysis-tutorial:
+    update: 1
+
+  alisw-github-io:
+    update: 1
+
+  analysis-framework:
+    update: 1
+
+  CodingGuidelines:
     update: 1
