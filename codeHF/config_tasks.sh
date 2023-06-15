@@ -101,8 +101,8 @@ DOO2_TASK_FLOW=0    # hf-task-flow
 # Other
 DOO2_MCCONV=0       # mc-converter
 DOO2_FDDCONV=0      # fdd-converter
-DOO2_COLLCONV=1     # collision-converter
-DOO2_ZDCCONV=1      # zdc-converter
+DOO2_COLLCONV=0     # collision-converter
+DOO2_ZDCCONV=0      # zdc-converter
 
 # Selection cuts
 APPLYCUTS_D0=1      # Apply D0 selection cuts.

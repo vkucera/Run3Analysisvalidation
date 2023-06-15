@@ -4,7 +4,7 @@
 # Input specification for runtest.sh
 # (Modifies input parameters.)
 
-INPUT_CASE=12            # Input case
+INPUT_CASE=13            # Input case
 
 NFILESMAX=-0             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
 
@@ -54,6 +54,13 @@ case $INPUT_CASE in
     # INPUT_DIR="/home/vkucera/data/derived/alice/data/2017/LHC17p/000282189"
     # INPUT_DIR="/home/vkucera/data/parent/alice/data/2017/LHC17q/000282366" # train test input
     INPUT_FILES="AO2D.root"
+    ISINPUTO2=1
+    ;;
+  13)
+    INPUT_LABEL="Run 3, p-p 13.6 TeV LHC22m, real"
+    INPUT_DIR="/home/vkucera/data/derived/hy_181557"
+    INPUT_FILES="AO2D.root"
+    INPUT_RUN=3
     ISINPUTO2=1
     ;;
   100)
