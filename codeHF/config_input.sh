@@ -54,17 +54,20 @@ case $INPUT_CASE in
     # INPUT_DIR="/home/vkucera/data/derived/alice/data/2017/LHC17p/000282189"
     # INPUT_DIR="/home/vkucera/data/parent/alice/data/2017/LHC17q/000282366" # train test input
     INPUT_FILES="AO2D.root"
-    ISINPUTO2=1;;
+    ISINPUTO2=1
+    ;;
   100)
     INPUT_LABEL="Run 2, Pb-Pb real LHC15o"
     INPUT_DIR="/data2/vkucera/alice"
-    INPUT_SYS="PbPb";;
+    INPUT_SYS="PbPb"
+    ;;
   1000)
     INPUT_LABEL="Run 2, Pb-Pb real LHC15o"
     INPUT_DIR="data/train_test/"
     INPUT_SYS="PbPb"
     INPUT_FILES="AO2D.root"
-    ISINPUTO2=1;;
+    ISINPUTO2=1
+    ;;
   2) # reference
     INPUT_LABEL="Run 2, p-p 5.02 TeV LHC17p, MC LHC18a4a2_cent"
     INPUT_DIR="$INPUT_BASE/Run2/pp_5.02TeV/sim/LHC18a4a2_cent/282099"
