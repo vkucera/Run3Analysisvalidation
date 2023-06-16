@@ -5,8 +5,8 @@ from ROOT import TFile
 # print(f"Arguments of the script : {sys.argv[1:]=}")
 
 dic_trees = {}
-dic_trees["O2hf2prong"] = ["fHFflag"]
-dic_trees["O2hf3prong"] = ["fHFflag"]
+# dic_trees["O2hf2prong_001"] = ["fHFflag"]
+dic_trees["O2hf3prong_001"] = ["fHFflag"]
 
 for f in sys.argv[1:]:
     file = TFile.Open(f)
