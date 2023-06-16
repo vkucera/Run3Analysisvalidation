@@ -6,7 +6,7 @@
 
 INPUT_CASE=13            # Input case
 
-NFILESMAX=-0             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
+NFILESMAX=1             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
 
 # Number of input files per job (Automatic optimisation on if < 1.)
 NFILESPERJOB_CONVERT=0  # Conversion
@@ -57,8 +57,16 @@ case $INPUT_CASE in
     ISINPUTO2=1
     ;;
   13)
-    INPUT_LABEL="Run 3, p-p 13.6 TeV LHC22m, real"
-    INPUT_DIR="/home/vkucera/data/derived/hy_181557"
+    INPUT_LABEL="Run 3, p-p 13.6 TeV LHC22m, real, derived hyperloop"
+    INPUT_DIR="/home/vkucera/data/derived/hy_181557/alice/cern.ch/user/a/alihyperloop/jobs/0018/hy_181557/AOD/3660"
+    # INPUT_FILES="AO2D.root"
+    INPUT_FILES="AO2D_edit.root"
+    INPUT_RUN=3
+    ISINPUTO2=1
+    ;;
+  14)
+    INPUT_LABEL="Run 3, p-p 13.6 TeV LHC22m, real, parent"
+    INPUT_DIR="/home/vkucera/data/parent/alice/data/2022/LHC22m/523731/apass4/1820/o2_ctf_run00523731_orbit0320303473_tf0000000361_epn196/004"
     INPUT_FILES="AO2D.root"
     INPUT_RUN=3
     ISINPUTO2=1

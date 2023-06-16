@@ -29,7 +29,7 @@ MAKE_GRAPH=0        # Make topology graph.
 
 # Activation of O2 workflows
 # Trigger selection
-DOO2_TRIGSEL=1      # event-selection
+DOO2_TRIGSEL=0      # event-selection
 # QA
 DOO2_REJ_ALICE3=0   # hf-task-qa-pid-rejection
 DOO2_QA_EFF=0       # qa-efficiency
@@ -41,9 +41,9 @@ DOO2_PID_TOF=0      # pid-tof-full/alice3-pid-tof
 DOO2_PID_TOF_QA=0   # pid-tof-qa-mc
 DOO2_PID_BAYES=0    # pid-bayes
 # Vertexing
-DOO2_SKIM=1         # hf-track-index-skim-creator
+DOO2_SKIM=0         # hf-track-index-skim-creator
 DOO2_CAND_2PRONG=0  # hf-candidate-creator-2prong
-DOO2_CAND_3PRONG=0  # hf-candidate-creator-3prong
+DOO2_CAND_3PRONG=1  # hf-candidate-creator-3prong
 DOO2_CAND_CASC=0    # hf-candidate-creator-cascade
 DOO2_CAND_LB=0      # hf-candidate-creator-lb
 DOO2_CAND_X=0       # hf-candidate-creator-x
@@ -437,7 +437,7 @@ function MakeScriptO2 {
 #!/bin/bash
 FileIn="\$1"
 JSON="\$2"
-$O2EXEC
+valgrind --leak-check=yes $O2EXEC
 EOF
 }
 
