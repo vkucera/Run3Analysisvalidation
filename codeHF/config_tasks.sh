@@ -119,11 +119,11 @@ APPLYCUTS_XICC=0    # Apply Ξcc selection cuts.
 APPLYCUTS_B0=0      # Apply B0 selection cuts.
 APPLYCUTS_BPLUS=0   # Apply B+ selection cuts.
 
-SAVETREES=0         # Save O2 tables to trees.
+SAVETREES=1         # Save O2 tables to trees.
 USEO2VERTEXER=1     # Use the O2 vertexer in AliPhysics.
 USEALIEVCUTS=1      # Use AliEventCuts in AliPhysics (as used by conversion task)
 DORATIO=1           # Plot histogram ratios in comparison.
-INPUT_DERIVED=1     # Input contains derived skims
+INPUT_DERIVED=0     # Input contains derived skims
 
 ####################################################################################################
 
