@@ -4,7 +4,7 @@
 # Input specification for runtest.sh
 # (Modifies input parameters.)
 
-INPUT_CASE=14            # Input case
+INPUT_CASE=13            # Input case
 
 NFILESMAX=1             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
 
@@ -24,6 +24,7 @@ JSONRUN5_HF="dpl-config_run5_hf.json"
 # J/psi and X (higher pt cut on 2-prong decay tracks and no DCA cut on single track)
 JSONRUN5_ONIAX="dpl-config_run5_oniaX.json"
 JSON="$JSONRUN3"
+# JSON="dpl-config_skims.json"
 
 # Default settings:
 # INPUT_FILES="AliESDs.root"
@@ -58,7 +59,8 @@ case $INPUT_CASE in
     ;;
   13)
     INPUT_LABEL="Run 3, p-p 13.6 TeV LHC22m, real, derived hyperloop"
-    INPUT_DIR="/home/vkucera/data/derived/hy_181557/alice/cern.ch/user/a/alihyperloop/jobs/0018/hy_181557/AOD/3660"
+    # INPUT_DIR="/home/vkucera/data/derived/hy_181557/alice/cern.ch/user/a/alihyperloop/jobs/0018/hy_181557/AOD/3660"
+    INPUT_DIR="/home/vkucera/data/derived/hy_181557/alice/cern.ch/user/a/alihyperloop/jobs/0018/hy_181557/AOD/3660_local_sub"
     # INPUT_FILES="AO2D.root"
     INPUT_FILES="AO2D_edit.root"
     INPUT_RUN=3
