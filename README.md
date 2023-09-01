@@ -46,7 +46,7 @@ The steering script [`runtest.sh`](exec/runtest.sh) performs the following execu
   * If `SAVETREES=1`, tables are saved as trees in the `AnalysisResults_trees_O2.root` file.
   * Parameters of individual tasks are picked up from the JSON configuration file (`dpl-config.json` by default).
   * By default, the list of input files includes files produced by the conversion step.
-  * In case you want to use `AO2D.root` files as input directly, you can set `ISINPUTO2=1` in your input specification
+  * In case you want to use `AO2D.root` files as input directly, you can set `INPUT_IS_O2=1` in your input specification
     and use it in your configuration to deactivate incompatible steps (typically the conversion and AliPhysics tasks).
 * Run output postprocessing. (activated by `DOPOSTPROCESS=1`)
   * Executes the postprocessing step script.
@@ -98,7 +98,7 @@ Dummy examples can be found in: [`config/config_input_dummy.sh`](config/config_i
 ### Build AliPhysics and O<sup>2</sup>(Physics)
 
 Follow the official [AliPhysics installation](https://alice-doc.github.io/alice-analysis-tutorial/building/) and
-[O<sup>2</sup>(Physics) installation](https://aliceo2group.github.io/analysis-framework/docs/installing/) instructions.
+[O<sup>2</sup>(Physics) installation](https://aliceo2group.github.io/analysis-framework/docs/gettingstarted/installing.html) instructions.
 
 Make sure the AliPhysics and O<sup>2</sup>Physics environments can be entered using the following respective commands.
 
@@ -255,8 +255,8 @@ bash <path to the Run3Analysisvalidation directory>/exec/check_spaces.sh
 clang-format -style=file -i <file>
 ```
 
-### [MegaLinter](https://megalinter.github.io/latest/mega-linter-runner/)
+### [MegaLinter](https://oxsecurity.github.io/megalinter/latest/mega-linter-runner/)
 
 ```bash
-mega-linter-runner
+npx mega-linter-runner
 ```

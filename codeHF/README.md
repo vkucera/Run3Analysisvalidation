@@ -3,20 +3,20 @@
 ## HF decay reconstruction tasks
 The prepared HF example allows you to run reconstruction of 2-prong secondary vertices and a simple analysis of D<sup>0</sup> mesons. The entire data processing procedure in O<sup>2</sup> involves several steps:
 1. Pre-selection of secondary tracks
-   * Performed by the [HFTrackIndexSkimsCreator](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/TableProducer/HFTrackIndexSkimsCreator.cxx) class
-   in the `o2-analysis-hf-track-index-skims-creator` binary.
+   * Performed by the [trackIndexSkimCreator](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/TableProducer/trackIndexSkimCreator.cxx) class
+   in the `o2-analysis-hf-track-index-skim-creator` binary.
    * Includes track selection, candidate preselection, and secondary vertex reconstruction.
 1. Reconstruction of 2-prong decay candidates
-   * Performed by the [HFCandidateCreator2Prong](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/TableProducer/HFCandidateCreator2Prong.cxx) class
+   * Performed by the [candidateCreator2Prong](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/TableProducer/candidateCreator2Prong.cxx) class
    in the `o2-analysis-hf-candidate-creator-2prong` binary.
    * Reconstructs the secondary vertices again and creates 2-prong decay candidates.
    * Performs MC matching of the reconstructed candidates and of the generated particles.
 1. Final selection of candidates
-   * Performed by the [HFD0CandidateSelector](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/TableProducer/HFD0CandidateSelector.cxx) class
-   in the `o2-analysis-hf-d0-candidate-selector` binary.
+   * Performed by the [candidateSelectorD0](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/TableProducer/candidateSelectorD0.cxx) class
+   in the `o2-analysis-hf-candidate-selector-d0` binary.
    * Appplies cuts on the parameters of the decay topology and track PID cuts.
 1. D<sup>0</sup> analysis task
-   * Performed by the [TaskD0](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/Tasks/taskD0.cxx) class
+   * Performed by the [taskD0](https://github.com/AliceO2Group/O2Physics/blob/master/PWGHF/D2H/Tasks/taskD0.cxx) class
    in the `o2-analysis-hf-task-d0` binary.
    * Fills histograms with kinematic properties of selected candidates (and matched particles).
 
@@ -37,7 +37,8 @@ To process Monte Carlo data, you also need the corresponding `galice.root` and `
 
 The default HF input specification script `config_input.sh` contains some predefined input cases with hard-coded paths.
 By default `INPUT_CASE=2` is selected.
-To run the code with the same input files locally on your machine, download them from `/alice/sim/2018/LHC18a4a2_cent/282099/001/` on the Grid.
+To run the code with the same input files locally on your machine, download them from the Grid directory `/alice/sim/2018/LHC18a4a2_cent/282099/001/`.
+You can use the [`download_from_grid.sh`](../exec/download_from_grid.sh) script for that.
 
 ### Run the example
 
@@ -54,3 +55,13 @@ The postprocessing step produces several plots `comparison_histos_(...).pdf`, `M
 To confirm that the output of the default settings looks as expected, compare the produced plots with their reference counterparts `(...)_ref.pdf`.
 
 The complete list of commit hashes used to produce the reference plots can be found in `versions_ref.txt`.
+
+## Add a new workflow
+
+- Add the workflow in the task configuration ([`config_task.sh`](config_tasks.sh)):
+  - Add the activation switch: `DOO2_...=0         # name of the workflow (without o2-analysis)`.
+  - Add the application of the switch in the `MakeScriptO2` function: `[ $DOO2_... -eq 1 ] && WORKFLOWS+=" o2-analysis-..."`.
+  - If needed, add lines in the `AdjustJson` function to modify the JSON configuration.
+- Add the workflow specification in the workflow database ([`workflows.yml`](workflows.yml)):
+  - See the dummy example `o2-analysis-workflow` for the full list of options.
+- Add the device configuration in the default JSON file ([`dpl-config_run3.json`](dpl-config_run3.json)).

@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 import os
 
-from ROOT import TF1, TH2F, TCanvas, TFile, TLatex, gROOT, gStyle
+from ROOT import (  # pylint: disable=import-error
+    TF1,
+    TH2F,
+    TCanvas,
+    TFile,
+    TLatex,
+    gROOT,
+    gStyle,
+)
 
 
 def makeSavePaths(title, *fileFormats, outputdir="outputPlots"):
@@ -100,7 +108,7 @@ plotsinglevar(
     "hf-task-jpsi-mc",
     "J/#psi",
     2,
-    "hmassBg",
+    "hMassBg",
     2.7,
     3.4,
     0.1,

@@ -24,8 +24,8 @@ Int_t PlotEfficiency(TString pathFile = "AnalysisResults.root", TString particle
 
   // binning
   Int_t iNRebin = 4;
-  //Double_t* dRebin = nullptr;
-  //const Int_t NRebin = 1;
+  // Double_t* dRebin = nullptr;
+  // const Int_t NRebin = 1;
   Double_t dRebin[] = {0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10};
   const Int_t NRebin = sizeof(dRebin) / sizeof(dRebin[0]) - 1;
 
@@ -50,11 +50,21 @@ Int_t PlotEfficiency(TString pathFile = "AnalysisResults.root", TString particle
     Printf("\nPlotting efficiency for: %s", particle.Data());
 
     TString outputDir = Form("hf-task-%s", particle.Data()); // analysis output directory with histograms
+    TString outputDirLc = "hf-task-lc/MC/";
+
+    TString nameHistRec;
+    TString nameHistgen;
 
     // inclusive candidates
-    TString nameHistRec = outputDir + "/hPtRecSig"; // reconstruction level pT of matched candidates
-    //nameHistRec = outputDir + "/hPtGenSig"; // generator level pT of matched candidates (no pT smearing)
-    TString nameHistgen = outputDir + "/hPtGen"; // generator level pT of generated particles
+    if (particle == "lc") {
+      nameHistRec = outputDirLc + "reconstructed/signal/hPtRecSig"; // reconstruction level pT of matched candidates
+      nameHistgen = outputDirLc + "generated/signal/hPtGen";        // generator level pT of generated particles
+    } else {
+      nameHistRec = outputDir + "/hPtRecSig"; // reconstruction level pT of matched candidates
+      // nameHistRec = outputDir + "/hPtGenSig"; // generator level pT of matched candidates (no pT smearing)
+      nameHistgen = outputDir + "/hPtGen"; // generator level pT of generated particles
+    }
+
     TH1F* hPtRecIncl = (TH1F*)file->Get(nameHistRec.Data());
     if (!hPtRecIncl) {
       Printf("Error: Failed to load %s from %s", nameHistRec.Data(), pathFile.Data());
@@ -67,14 +77,20 @@ Int_t PlotEfficiency(TString pathFile = "AnalysisResults.root", TString particle
     }
 
     // prompt candidates
+    if (particle == "lc") {
+      nameHistRec = outputDirLc + "reconstructed/prompt/hPtRecSigPrompt";
+      nameHistgen = outputDirLc + "generated/prompt/hPtGenPrompt";
+    } else {
+      nameHistRec = outputDir + "/hPtRecSigPrompt";
+      nameHistgen = outputDir + "/hPtGenPrompt";
+    }
+
     bool okPrompt = true;
-    nameHistRec = outputDir + "/hPtRecSigPrompt";
     TH1F* hPtRecPrompt = (TH1F*)file->Get(nameHistRec.Data());
     if (!hPtRecPrompt) {
       Printf("Warning: Failed to load %s from %s", nameHistRec.Data(), pathFile.Data());
       okPrompt = false;
     }
-    nameHistgen = outputDir + "/hPtGenPrompt";
     TH1F* hPtGenPrompt = (TH1F*)file->Get(nameHistgen.Data());
     if (!hPtGenPrompt) {
       Printf("Warning: Failed to load %s from %s", nameHistgen.Data(), pathFile.Data());
@@ -82,14 +98,20 @@ Int_t PlotEfficiency(TString pathFile = "AnalysisResults.root", TString particle
     }
 
     // non-prompt candidates
+    if (particle == "lc") {
+      nameHistRec = outputDirLc + "reconstructed/nonprompt/hPtRecSigNonPrompt";
+      nameHistgen = outputDirLc + "generated/nonprompt/hPtGenNonPrompt";
+    } else {
+      nameHistRec = outputDir + "/hPtRecSigNonPrompt";
+      nameHistgen = outputDir + "/hPtGenNonPrompt";
+    }
+
     bool okNonPrompt = true;
-    nameHistRec = outputDir + "/hPtRecSigNonPrompt";
     TH1F* hPtRecNonPrompt = (TH1F*)file->Get(nameHistRec.Data());
     if (!hPtRecNonPrompt) {
       Printf("Warning: Failed to load %s from %s", nameHistRec.Data(), pathFile.Data());
       okNonPrompt = false;
     }
-    nameHistgen = outputDir + "/hPtGenNonPrompt";
     TH1F* hPtGenNonPrompt = (TH1F*)file->Get(nameHistgen.Data());
     if (!hPtGenNonPrompt) {
       Printf("Warning: Failed to load %s from %s", nameHistgen.Data(), pathFile.Data());
@@ -211,7 +233,9 @@ Int_t PlotEfficiency(TString pathFile = "AnalysisResults.root", TString particle
     legendEff->Draw();
 
     canPt->SaveAs(Form("MC_%s_pT.pdf", particle.Data()));
+    canPt->SaveAs(Form("MC_%s_pT.png", particle.Data()));
     canEff->SaveAs(Form("MC_%s_eff.pdf", particle.Data()));
+    canEff->SaveAs(Form("MC_%s_eff.png", particle.Data()));
   }
   delete arrayParticle;
   return 0;

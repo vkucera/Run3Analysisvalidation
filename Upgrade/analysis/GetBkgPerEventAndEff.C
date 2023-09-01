@@ -24,8 +24,8 @@ enum myProc_t { kJpsiToEE,
                 kNChannels };
 
 const char* hfTaskLabel[kNChannels] = {"jpsi", "jpsiToMuMu", "x", "xToPiPiMuMu", "xicc", "bplus", "chic", "chic"};
-const char* histNameSig[kNChannels] = {"hmassSig", "hMassRecSig", "hMassRecSig", "hMassRecSig", "hmassSig", "hMassRecSig", "hMassRecSig", "hMassRecSig"};
-const char* histNameBkg[kNChannels] = {"hmass", "hMassRecBkg", "hMass", "hMassRecBkg", "hmass", "hMass", "hMass", "hMass"};
+const char* histNameSig[kNChannels] = {"hMassSig", "hMassRecSig", "hMassRecSig", "hMassRecSig", "hMassSig", "hMassRecSig", "hMassRecSig", "hMassRecSig"};
+const char* histNameBkg[kNChannels] = {"hMass", "hMassRecBkg", "hMass", "hMassRecBkg", "hMass", "hMass", "hMass", "hMass"};
 
 const char* label[kNChannels] = {
   "J/#psi #rightarrow ee",
@@ -102,8 +102,16 @@ void GetBkgPerEventAndEff(const char* signalfilename,
   TFile* input_sig = new TFile(signalfilename, "read");
   TFile* input_bkg = new TFile(bkgfilename, "read");
 
-  auto dir_sig = (TDirectory*)input_sig->GetDirectory(Form("hf-task-%s-mc", hfTaskLabel[channel]));
-  auto dir_bkg = (TDirectory*)input_bkg->GetDirectory(Form("hf-task-%s", hfTaskLabel[channel]));
+  TDirectory* dir_sig;
+  TDirectory* dir_bkg;
+
+  if (channel == "lc") {
+    dir_sig = (TDirectory*)input_sig->GetDirectory("hf-task-lc/MC/reconstructed/signal/");
+    dir_bkg = (TDirectory*)input_bkg->GetDirectory("hf-task-lc/MC/reconstructed/signal/");
+  } else {
+    dir_sig = (TDirectory*)input_sig->GetDirectory(Form("hf-task-%s-mc", hfTaskLabel[channel]));
+    dir_bkg = (TDirectory*)input_bkg->GetDirectory(Form("hf-task-%s", hfTaskLabel[channel]));
+  }
 
   hMassVsPtSig = (TH2D*)dir_sig->Get(histNameSig[channel]);
   hMassVsPtSig->SetName("hMassVsPtSig");
