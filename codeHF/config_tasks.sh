@@ -13,6 +13,12 @@
 
 ####################################################################################################
 
+# Here you can select the AliPhysics and O2Physics branches to load.
+# BRANCH_ALI="master"
+# ENV_ALI="alienv setenv AliPhysics/latest-${BRANCH_ALI}-o2 -c"
+# BRANCH_O2="master"
+# ENV_O2="alienv setenv O2Physics/latest-${BRANCH_O2}-o2 -c"
+
 # Steps
 DOCLEAN=0           # Delete created files (before and after running tasks).
 DOCONVERT=0         # Convert AliESDs.root to AO2D.root.
@@ -21,7 +27,7 @@ DOO2=1              # Run O2 tasks.
 DOPOSTPROCESS=0     # Run output postprocessing. (Comparison plots. Requires DOALI=1 and/or DOO2=1)
 
 # Disable incompatible steps.
-[ "$ISINPUTO2" -eq 1 ] && { DOCONVERT=0; DOALI=0; }
+[ "$INPUT_IS_O2" -eq 1 ] && { DOCONVERT=0; DOALI=0; }
 
 # O2 database
 DATABASE_O2="workflows.yml"
@@ -89,20 +95,22 @@ DOO2_TREE_XICC=0    # hf-tree-creator-xicc-to-p-k-pi-pi
 DOO2_TREE_CHIC=0    # hf-tree-creator-chic-to-jpsi-gamma
 DOO2_TREE_BPLUS=0   # hf-tree-creator-bplus-to-d0-pi
 # Correlations
-DOO2_D0D0BAR_DATA=0       # hf-correlator-d0-d0bar
-DOO2_D0D0BAR_MCREC=0      # hf-correlator-d0-d0bar-mc-rec
-DOO2_D0D0BAR_MCGEN=0      # hf-correlator-d0-d0bar-mc-gen
-DOO2_DPLUSDMINUS_DATA=0   # hf-correlator-dplus-dminus
-DOO2_DPLUSDMINUS_MCREC=0  # hf-correlator-dplus-dminus-mc-rec
-DOO2_DPLUSDMINUS_MCGEN=0  # hf-correlator-dplus-dminus-mc-gen
-DOO2_CORRELATOR_D0HADRON=0    # hf-correlator-d0-hadrons
-DOO2_TASK_D0HADRON=0          # hf-task-correlation-d0-hadrons
-DOO2_TASK_FLOW=0    # hf-task-flow
-# Other
-DOO2_MCCONV=0       # mc-converter
-DOO2_FDDCONV=0      # fdd-converter
-DOO2_COLLCONV=0     # collision-converter
-DOO2_ZDCCONV=0      # zdc-converter
+DOO2_CORR_D0D0BAR_DATA=0       # hf-correlator-d0-d0bar
+DOO2_CORR_D0D0BAR_MCREC=0      # hf-correlator-d0-d0bar-mc-rec
+DOO2_CORR_D0D0BAR_MCGEN=0      # hf-correlator-d0-d0bar-mc-gen
+DOO2_CORR_DPLUSDMINUS_DATA=0   # hf-correlator-dplus-dminus
+DOO2_CORR_DPLUSDMINUS_MCREC=0  # hf-correlator-dplus-dminus-mc-rec
+DOO2_CORR_DPLUSDMINUS_MCGEN=0  # hf-correlator-dplus-dminus-mc-gen
+DOO2_CORR_D0HADRON=0           # hf-correlator-d0-hadrons
+DOO2_CORR_DPLUSHADRON=0        # hf-correlator-dplus-hadrons
+DOO2_CORR_DSHADRON=0           # hf-correlator-ds-hadrons
+DOO2_TASK_D0HADRON=0           # hf-task-correlation-d0-hadrons
+DOO2_TASK_FLOW=0               # hf-task-flow
+# Converters
+DOO2_CONV_MC=0       # mc-converter
+DOO2_CONV_FDD=0      # fdd-converter
+DOO2_CONV_COLL=0     # collision-converter
+DOO2_CONV_ZDC=0      # zdc-converter
 
 # Selection cuts
 APPLYCUTS_D0=1      # Apply D0 selection cuts.
@@ -123,7 +131,6 @@ SAVETREES=0         # Save O2 tables to trees.
 USEO2VERTEXER=1     # Use the O2 vertexer in AliPhysics.
 USEALIEVCUTS=1      # Use AliEventCuts in AliPhysics (as used by conversion task)
 DORATIO=1           # Plot histogram ratios in comparison.
-INPUT_DERIVED=1     # Input contains derived skims
 
 ####################################################################################################
 
@@ -149,6 +156,11 @@ function AdjustJson {
   cp "$JSON" "$JSON_EDIT" || ErrExit "Failed to cp $JSON $JSON_EDIT."
   JSON="$JSON_EDIT"
 
+  # Derived AO2D input
+  if [ "$INPUT_PARENT_MASK" ]; then
+    ReplaceString "PARENT_PATH_MASK" "$INPUT_PARENT_MASK" "$JSON" || ErrExit "Failed to edit $JSON."
+  fi
+
   # Collision system
   MsgWarn "Setting collision system $INPUT_SYS"
 
@@ -163,7 +175,7 @@ function AdjustJson {
   fi
 
   # MC
-  if [ "$ISMC" -eq 1 ]; then
+  if [ "$INPUT_IS_MC" -eq 1 ]; then
     MsgWarn "Using MC data"
     ReplaceString "\"processMc\": \"false\"" "\"processMc\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
     ReplaceString "\"processMC\": \"false\"" "\"processMC\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
@@ -197,7 +209,7 @@ function AdjustJson {
   fi
 
   # timestamp-task
-  if [[ "$ISMC" -eq 1 && "$INPUT_RUN" -eq 2 ]]; then
+  if [[ "$INPUT_IS_MC" -eq 1 && "$INPUT_RUN" -eq 2 ]]; then
     ReplaceString "\"isRun2MC\": \"false\"" "\"isRun2MC\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
   else
     ReplaceString "\"isRun2MC\": \"true\"" "\"isRun2MC\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
@@ -328,12 +340,14 @@ function MakeScriptO2 {
   SUFFIX_SKIM="" # the actual suffix to be used instead of the mask
   # Λc → K0S p cascade reconstruction
   [[ $DOO2_CAND_CASC -eq 1 || $DOO2_SEL_LCK0SP -eq 1 || $DOO2_TASK_LCK0SP -eq 1 ]] && SUFFIX_SKIM+="_v0"
+
   # Suffix to distinguish versions of the same workflow for different runs in the workflow database
   SUFFIX_RUN_MASK="_runX" # suffix mask to be replaced in the workflow names
   SUFFIX_RUN="_run${INPUT_RUN}" # the actual suffix to be used instead of the mask
-  # Suffix to distinguish the candidate creators that do/do not need skim creator in the workflow database
+
+  # Suffix to distinguish the candidate creators that do or do not need skim creator in the workflow database
   SUFFIX_DER_MASK="_derX" # suffix mask to be replaced in the workflow names
-  [ $INPUT_DERIVED -eq 0 ] && SUFFIX_DER="" || SUFFIX_DER="_derived" # the actual suffix to be used instead of the mask
+  [ "$INPUT_PARENT_MASK" ] && SUFFIX_DER="_derived" || SUFFIX_DER="" # the actual suffix to be used instead of the mask
 
   WORKFLOWS=""
   # Trigger selection
@@ -390,14 +404,16 @@ function MakeScriptO2 {
   [ $DOO2_TASK_BPLUS -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-bplus"
   # Correlations
   WF_CORR=""
-  [ $DOO2_D0D0BAR_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar o2-analysis-hf-task-correlation-d-dbar"
-  [ $DOO2_D0D0BAR_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar-mc-rec o2-analysis-hf-task-correlation-d-dbar-mc-rec"
-  [ $DOO2_D0D0BAR_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar-mc-gen o2-analysis-hf-task-correlation-d-dbar-mc-gen"
-  [ $DOO2_DPLUSDMINUS_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus o2-analysis-hf-task-correlation-d-dbar"
-  [ $DOO2_DPLUSDMINUS_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus-mc-rec o2-analysis-hf-task-correlation-d-dbar-mc-rec"
-  [ $DOO2_DPLUSDMINUS_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus-mc-gen o2-analysis-hf-task-correlation-d-dbar-mc-gen"
+  [ $DOO2_CORR_D0D0BAR_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar o2-analysis-hf-task-correlation-d-dbar"
+  [ $DOO2_CORR_D0D0BAR_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar-mc-rec o2-analysis-hf-task-correlation-d-dbar-mc-rec"
+  [ $DOO2_CORR_D0D0BAR_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar-mc-gen o2-analysis-hf-task-correlation-d-dbar-mc-gen"
+  [ $DOO2_CORR_DPLUSDMINUS_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus o2-analysis-hf-task-correlation-d-dbar"
+  [ $DOO2_CORR_DPLUSDMINUS_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus-mc-rec o2-analysis-hf-task-correlation-d-dbar-mc-rec"
+  [ $DOO2_CORR_DPLUSDMINUS_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus-mc-gen o2-analysis-hf-task-correlation-d-dbar-mc-gen"
   [ "$WF_CORR" ] && WORKFLOWS+=" $WF_CORR"
-  [ $DOO2_CORRELATOR_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-d0-hadrons"
+  [ $DOO2_CORR_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-d0-hadrons"
+  [ $DOO2_CORR_DPLUSHADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-dplus-hadrons"
+  [ $DOO2_CORR_DSHADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-ds-hadrons"
   [ $DOO2_TASK_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-correlation-d0-hadrons"
   [ $DOO2_TASK_FLOW -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-flow"
   # Tree creators
@@ -408,15 +424,15 @@ function MakeScriptO2 {
   [ $DOO2_TREE_XICC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-xicc-to-p-k-pi-pi"
   [ $DOO2_TREE_CHIC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-chic-to-jpsi-gamma"
   [ $DOO2_TREE_BPLUS -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-bplus-to-d0-pi"
-  # Other
-  [ $DOO2_MCCONV -eq 1 ] && WORKFLOWS+=" o2-analysis-mc-converter"
-  [ $DOO2_FDDCONV -eq 1 ] && WORKFLOWS+=" o2-analysis-fdd-converter"
-  [ $DOO2_COLLCONV -eq 1 ] && WORKFLOWS+=" o2-analysis-collision-converter"
-  [ $DOO2_ZDCCONV -eq 1 ] && WORKFLOWS+=" o2-analysis-zdc-converter"
+  # Converters
+  [ $DOO2_CONV_MC -eq 1 ] && WORKFLOWS+=" o2-analysis-mc-converter"
+  [ $DOO2_CONV_FDD -eq 1 ] && WORKFLOWS+=" o2-analysis-fdd-converter"
+  [ $DOO2_CONV_COLL -eq 1 ] && WORKFLOWS+=" o2-analysis-collision-converter"
+  [ $DOO2_CONV_ZDC -eq 1 ] && WORKFLOWS+=" o2-analysis-zdc-converter"
 
   # Translate options into arguments of the generating script.
   OPT_MAKECMD=""
-  [ "$ISMC" -eq 1 ] && OPT_MAKECMD+=" --mc"
+  [ "$INPUT_IS_MC" -eq 1 ] && OPT_MAKECMD+=" --mc"
   [ "$DEBUG" -eq 1 ] && OPT_MAKECMD+=" -d"
   [ $SAVETREES -eq 1 ] && OPT_MAKECMD+=" -t"
   [ $MAKE_GRAPH -eq 1 ] && OPT_MAKECMD+=" -g"
@@ -448,7 +464,7 @@ EOF
 }
 
 function MakeScriptAli {
-  ALIEXEC="root -b -q -l \"$DIR_TASKS/RunHFTaskLocal.C(\\\"\$FileIn\\\", \\\"\$JSON\\\", $ISMC, $USEO2VERTEXER, $USEALIEVCUTS)\""
+  ALIEXEC="root -b -q -l \"$DIR_TASKS/RunHFTaskLocal.C(\\\"\$FileIn\\\", \\\"\$JSON\\\", $INPUT_IS_MC, $USEO2VERTEXER, $USEALIEVCUTS)\""
   cat << EOF > "$SCRIPT_ALI"
 #!/bin/bash
 FileIn="\$1"
@@ -465,16 +481,16 @@ function MakeScriptPostprocess {
     [ $DOO2_SKIM -eq 1 ] && OPT_COMPARE+=" events tracks skim "
     [ $DOO2_CAND_2PRONG -eq 1 ] && OPT_COMPARE+=" cand2 "
     [ $DOO2_CAND_3PRONG -eq 1 ] && OPT_COMPARE+=" cand3 "
-    [ $DOO2_TASK_D0 -eq 1 ] && { OPT_COMPARE+=" d0 "; [ "$ISMC" -eq 1 ] && OPT_COMPARE+=" d0-mc "; }
+    [ $DOO2_TASK_D0 -eq 1 ] && { OPT_COMPARE+=" d0 "; [ "$INPUT_IS_MC" -eq 1 ] && OPT_COMPARE+=" d0-mc "; }
     [ $DOO2_TASK_DS -eq 1 ] && OPT_COMPARE+=" ds "
     [ $DOO2_TASK_DPLUS -eq 1 ] && OPT_COMPARE+=" dplus "
-    [ $DOO2_TASK_LC -eq 1 ] && { OPT_COMPARE+=" lc "; [ "$ISMC" -eq 1 ] && OPT_COMPARE+=" lc-mc-pt  lc-mc-prompt  lc-mc-nonprompt  lc-mc-eta  lc-mc-phi "; }
+    [ $DOO2_TASK_LC -eq 1 ] && { OPT_COMPARE+=" lc "; [ "$INPUT_IS_MC" -eq 1 ] && OPT_COMPARE+=" lc-mc-pt  lc-mc-prompt  lc-mc-nonprompt  lc-mc-eta  lc-mc-phi "; }
     [ $DOO2_TASK_XIC -eq 1 ] && OPT_COMPARE+=" xic "
     [ $DOO2_TASK_JPSI -eq 1 ] && OPT_COMPARE+=" jpsi "
     [ "$OPT_COMPARE" ] && POSTEXEC+=" && root -b -q -l \"$DIR_TASKS/Compare.C(\\\"\$FileO2\\\", \\\"\$FileAli\\\", \\\"$OPT_COMPARE\\\", $DORATIO)\""
   }
   # Plot particle reconstruction efficiencies.
-  [[ $DOO2 -eq 1 && $ISMC -eq 1 ]] && {
+  [[ $DOO2 -eq 1 && $INPUT_IS_MC -eq 1 ]] && {
     PARTICLES=""
     [ $DOO2_TASK_D0 -eq 1 ] && PARTICLES+=" d0 "
     [ $DOO2_TASK_DS -eq 1 ] && PARTICLES+=" ds "

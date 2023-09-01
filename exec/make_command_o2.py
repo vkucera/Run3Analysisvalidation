@@ -39,7 +39,7 @@ def msg_bold(message: str):
     eprint("\x1b[1m%s\x1b[0m" % message)
 
 
-def join_strings(obj):
+def join_strings(obj) -> str:
     """Return strings concatenated into one."""
     if isinstance(obj, str):
         return obj
@@ -47,6 +47,7 @@ def join_strings(obj):
         return " ".join(obj)
     else:
         msg_fatal("Cannot convert %s into a string" % type(obj))
+        return ""
 
 
 def join_to_list(obj, list_out: list):
@@ -243,7 +244,9 @@ def main():
                 )
         str_before = "AOD/"
         str_after = "/0"
-        string_tables = ",".join(str_before + t + ("" if "/" in t else str_after) for t in tables)
+        string_tables = ",".join(
+            str_before + t + ("" if "/" in t else str_after) for t in tables
+        )
         if string_tables:
             opt_local += " --aod-writer-keep " + string_tables
 
