@@ -7,8 +7,13 @@ R__ADD_INCLUDE_PATH($ALICE_PHYSICS)
 #include <OADB/macros/AddTaskPhysicsSelection.C>
 #include <ANALYSIS/macros/AddTaskPIDResponse.C>
 #include <RUN3/AddTaskAO2Dconverter.C>
+#include <PWGHF/vertexingHF/macros/AddTaskVertexingHFRun3Conversion.C>
+#include <PWGLF/STRANGENESS/Cascades/Run2/macros/AddTaskWeakDecayVertexer.C>
 
 TChain* CreateLocalChain(const char* txtfile, const char* type, int nfiles);
+
+bool doWeakDecays = true;
+bool doHFConversion = true;
 
 Long64_t convertAO2D(TString listoffiles, bool isMC = 1, bool useAliEvCuts = false, bool isESD = 1, int nmaxevents = -1)
 {
@@ -42,12 +47,51 @@ Long64_t convertAO2D(TString listoffiles, bool isMC = 1, bool useAliEvCuts = fal
   AddTaskPIDResponse();
   if (isMC && isESD)
     AliMCEventHandler* handlerMC = AddMCHandler();
+
+  if (doWeakDecays) {
+    auto weakDecays = AddTaskWeakDecayVertexer();
+    weakDecays->SetUseImprovedFinding();
+    weakDecays->SetupLooseVertexing();
+    weakDecays->SetRevertexAllEvents(kTRUE);
+    weakDecays->SetForceResetV0s(kTRUE);
+    weakDecays->SetForceResetCascades(kTRUE);
+  }
+
+  if (doHFConversion) {
+    gSystem->Setenv("CHILD_DATASETS", "1");
+    // case 1
+    // gSystem->Setenv("RUNNO_child_1", "282341");
+    // gSystem->Setenv("ALIEN_JDL_child_1_LPMRUNNUMBER", "282341");
+    // gSystem->Setenv("ALIEN_JDL_child_1_LPMPRODUCTIONTYPE", "RAW");
+    // gSystem->Setenv("ALIEN_JDL_child_1_LPMINTERACTIONTYPE", "pp");
+    // gSystem->Setenv("ALIEN_JDL_child_1_LPMPRODUCTIONTAG", "LHC17p");
+    // case 100
+    gSystem->Setenv("RUNNO_child_1", "244918");
+    gSystem->Setenv("ALIEN_JDL_child_1_LPMRUNNUMBER", "244918");
+    gSystem->Setenv("ALIEN_JDL_child_1_LPMPRODUCTIONTYPE", "RAW");
+    gSystem->Setenv("ALIEN_JDL_child_1_LPMINTERACTIONTYPE", "PbPb");
+    gSystem->Setenv("ALIEN_JDL_child_1_LPMPRODUCTIONTAG", "LHC15o");
+
+    AliAnalysisTaskSEVertexingHFRun3Conversion* hfConverter = AddTaskVertexingHFRun3Conversion("");
+    if (!hfConverter) {
+      Printf("Cannot create HF converter!");
+      return -1;
+    }
+  }
+
   AliAnalysisTaskAO2Dconverter* converter = AddTaskAO2Dconverter("");
   //converter->SelectCollisionCandidates(AliVEvent::kAny);
+  converter->SetStoreHF();
   if (useAliEvCuts)
     converter->SetUseEventCuts(kTRUE);
   if (isMC)
     converter->SetMCMode();
+
+  converter->SetTruncation(true);
+  converter->SetCompression(501);
+  converter->SetMaxBytes(250000000);
+  converter->SetEMCALAmplitudeThreshold(0.075);
+
   if (!mgr->InitAnalysis())
     return -1;
   //PH   mgr->SetBit(AliAnalysisManager::kTrueNotify);
