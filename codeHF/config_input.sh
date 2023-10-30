@@ -4,7 +4,7 @@
 # Input specification for runtest.sh
 # (Modifies input parameters.)
 
-INPUT_CASE=2            # Input case
+INPUT_CASE=77            # Input case
 
 NFILESMAX=1             # Maximum number of processed input files. (Set to -0 to process all; to -N to process all but the last N files.)
 
@@ -25,6 +25,7 @@ JSONRUN5_ONIAX="dpl-config_run5_oniaX.json"
 JSON="$JSONRUN3"
 
 # Default settings:
+# INPUT_PARENT_MASK=""
 # INPUT_FILES="AliESDs.root"
 # INPUT_SYS="pp"
 # INPUT_RUN=2
@@ -67,8 +68,16 @@ case $INPUT_CASE in
     ;;
   7)
     INPUT_LABEL="Run 3, p-p 13.6 TeV, LHC22o, real"
-    INPUT_DIR="$INPUT_BASE/Run3/pp_13.6TeV/real/LHC22o"
-    INPUT_FILES="AO2D.root"
+    INPUT_DIR="/home/vkucera/hfo2-tutorial_3"
+    INPUT_FILES="AO2D_edit.root"
+    INPUT_IS_O2=1
+    INPUT_RUN=3
+    ;;
+  77)
+    INPUT_LABEL="Run 3, p-p 13.6 TeV, LHC22o, real"
+    INPUT_DIR="/home/vkucera/hfo2-tutorial_3"
+    INPUT_PARENT_MASK=";"
+    INPUT_FILES="AnalysisResults_trees.root"
     INPUT_IS_O2=1
     INPUT_RUN=3
     ;;

@@ -46,10 +46,13 @@ DOO2_PID_TPC=0      # pid-tpc-full
 DOO2_PID_TOF=0      # pid-tof-full/alice3-pid-tof
 DOO2_PID_TOF_QA=0   # pid-tof-qa-mc
 DOO2_PID_BAYES=0    # pid-bayes
+# Tutorial
+DOO2_SKIM_MINI=0    # o2-analysistutorial-hf-skim-creator-mini
+DOO2_TASK_MINI=1    # o2-analysistutorial-hf-task-mini
 # Vertexing
-DOO2_SKIM=1         # hf-track-index-skim-creator
-DOO2_CAND_2PRONG=1  # hf-candidate-creator-2prong
-DOO2_CAND_3PRONG=1  # hf-candidate-creator-3prong
+DOO2_SKIM=0         # hf-track-index-skim-creator
+DOO2_CAND_2PRONG=0  # hf-candidate-creator-2prong
+DOO2_CAND_3PRONG=0  # hf-candidate-creator-3prong
 DOO2_CAND_CASC=0    # hf-candidate-creator-cascade
 DOO2_CAND_LB=0      # hf-candidate-creator-lb
 DOO2_CAND_X=0       # hf-candidate-creator-x
@@ -73,10 +76,10 @@ DOO2_SEL_XICC=0     # hf-candidate-selector-xicc-to-p-k-pi-pi
 DOO2_SEL_B0=0       # hf-candidate-selector-b0-to-d-pi
 DOO2_SEL_BPLUS=0    # hf-candidate-selector-bplus-to-d0-pi
 # User tasks
-DOO2_TASK_D0=1      # hf-task-d0
+DOO2_TASK_D0=0      # hf-task-d0
 DOO2_TASK_DS=0      # hf-task-ds
 DOO2_TASK_DPLUS=0   # hf-task-dplus
-DOO2_TASK_LC=1      # hf-task-lc
+DOO2_TASK_LC=0      # hf-task-lc
 DOO2_TASK_LB=0      # hf-task-lb
 DOO2_TASK_XIC=0     # hf-task-xic
 DOO2_TASK_JPSI=0    # hf-task-jpsi
@@ -117,7 +120,7 @@ DOO2_JET_SUB_OUT=0  # je-jet-substructure-hf-output
 DOO2_CONV_MC=0      # mc-converter
 DOO2_CONV_FDD=0     # fdd-converter
 DOO2_CONV_COLL=0    # collision-converter
-DOO2_CONV_ZDC=1     # zdc-converter
+DOO2_CONV_ZDC=0     # zdc-converter
 DOO2_CONV_BC=1      # bc-converter
 
 # Selection cuts
@@ -166,6 +169,7 @@ function AdjustJson {
 
   # Derived AO2D input
   if [ "$INPUT_PARENT_MASK" ]; then
+    MsgWarn "Using derived data input"
     ReplaceString "PARENT_PATH_MASK" "$INPUT_PARENT_MASK" "$JSON" || ErrExit "Failed to edit $JSON."
   fi
 
@@ -408,6 +412,9 @@ function MakeScriptO2 {
   [ $DOO2_PID_BAYES -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-bayes"
   [ $DOO2_PID_TOF -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tof-full${SUFFIX_RUN}"
   [ $DOO2_PID_TOF_QA -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tof-qa-mc"
+  # Tutorial
+  [ $DOO2_SKIM_MINI -eq 1 ] && WORKFLOWS+=" o2-analysistutorial-hf-skim-creator-mini"
+  [ $DOO2_TASK_MINI -eq 1 ] && WORKFLOWS+=" o2-analysistutorial-hf-task-mini"
   # Vertexing
   [ $DOO2_SKIM -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-track-index-skim-creator${SUFFIX_SKIM}"
   [ $DOO2_CAND_2PRONG -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-candidate-creator-2prong${SUFFIX_DER}"
