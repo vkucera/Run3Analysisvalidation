@@ -36,16 +36,6 @@ MAKE_GRAPH=0        # Make topology graph.
 # Activation of O2 workflows
 # Trigger selection
 DOO2_TRIGSEL=0      # event-selection
-# QA
-DOO2_REJ_ALICE3=0   # hf-task-qa-pid-rejection
-DOO2_QA_EFF=0       # qa-efficiency
-DOO2_QA_EVTRK=0     # qa-event-track
-DOO2_MC_VALID=0     # hf-task-mc-validation
-# PID
-DOO2_PID_TPC=0      # pid-tpc-full
-DOO2_PID_TOF=0      # pid-tof-full/alice3-pid-tof
-DOO2_PID_TOF_QA=0   # pid-tof-qa-mc
-DOO2_PID_BAYES=0    # pid-bayes
 # Vertexing
 DOO2_SKIM=1         # hf-track-index-skim-creator
 DOO2_CAND_2PRONG=1  # hf-candidate-creator-2prong
@@ -72,7 +62,7 @@ DOO2_SEL_LCK0SP=0   # hf-candidate-selector-lc-to-k0s-p
 DOO2_SEL_XICC=0     # hf-candidate-selector-xicc-to-p-k-pi-pi
 DOO2_SEL_B0=0       # hf-candidate-selector-b0-to-d-pi
 DOO2_SEL_BPLUS=0    # hf-candidate-selector-bplus-to-d0-pi
-# User tasks
+# Analysis tasks
 DOO2_TASK_D0=1      # hf-task-d0
 DOO2_TASK_DS=0      # hf-task-ds
 DOO2_TASK_DPLUS=0   # hf-task-dplus
@@ -94,23 +84,42 @@ DOO2_TREE_X=0       # hf-tree-creator-x-to-jpsi-pi-pi
 DOO2_TREE_XICC=0    # hf-tree-creator-xicc-to-p-k-pi-pi
 DOO2_TREE_CHIC=0    # hf-tree-creator-chic-to-jpsi-gamma
 DOO2_TREE_BPLUS=0   # hf-tree-creator-bplus-to-d0-pi
+DOO2_TREE_LCK0SP=0  # hf-tree-creator-lc-to-k0s-p
 # Correlations
 DOO2_CORR_D0D0BAR_DATA=0       # hf-correlator-d0-d0bar
-DOO2_CORR_D0D0BAR_MCREC=0      # hf-correlator-d0-d0bar-mc-rec
-DOO2_CORR_D0D0BAR_MCGEN=0      # hf-correlator-d0-d0bar-mc-gen
+DOO2_CORR_D0D0BAR_MCREC=0      # hf-correlator-d0-d0bar_mc-rec
+DOO2_CORR_D0D0BAR_MCGEN=0      # hf-correlator-d0-d0bar_mc-gen
 DOO2_CORR_DPLUSDMINUS_DATA=0   # hf-correlator-dplus-dminus
-DOO2_CORR_DPLUSDMINUS_MCREC=0  # hf-correlator-dplus-dminus-mc-rec
-DOO2_CORR_DPLUSDMINUS_MCGEN=0  # hf-correlator-dplus-dminus-mc-gen
+DOO2_CORR_DPLUSDMINUS_MCREC=0  # hf-correlator-dplus-dminus_mc-rec
+DOO2_CORR_DPLUSDMINUS_MCGEN=0  # hf-correlator-dplus-dminus_mc-gen
 DOO2_CORR_D0HADRON=0           # hf-correlator-d0-hadrons
 DOO2_CORR_DPLUSHADRON=0        # hf-correlator-dplus-hadrons
 DOO2_CORR_DSHADRON=0           # hf-correlator-ds-hadrons
 DOO2_TASK_D0HADRON=0           # hf-task-correlation-d0-hadrons
 DOO2_TASK_FLOW=0               # hf-task-flow
+# Jets
+DOO2_JET_FIND=0     # je-jet-finder-d0
+DOO2_JET_FIND_QA=0  # je-jet-finder-hf-qa
+DOO2_JET_MATCH=0    # je-jet-matching
+DOO2_JET_SUB=0      # je-jet-substructure-hf
+DOO2_JET_SUB_OUT=0  # je-jet-substructure-hf-output
+# QA
+DOO2_REJ_ALICE3=0   # hf-task-qa-pid-rejection
+DOO2_QA_EFF=0       # qa-efficiency
+DOO2_QA_EVTRK=0     # qa-event-track
+DOO2_MC_VALID=0     # hf-task-mc-validation
+# PID
+DOO2_PID_TPC=0      # pid-tpc-full
+DOO2_PID_TOF=0      # pid-tof-full/alice3-pid-tof
+DOO2_PID_TOF_QA=0   # pid-tof-qa-mc
+DOO2_PID_BAYES=0    # pid-bayes
 # Converters
-DOO2_CONV_MC=0       # mc-converter
-DOO2_CONV_FDD=0      # fdd-converter
-DOO2_CONV_COLL=0     # collision-converter
-DOO2_CONV_ZDC=1      # zdc-converter
+DOO2_CONV_MC=0      # mc-converter
+DOO2_CONV_FDD=0     # fdd-converter
+DOO2_CONV_COLL=0    # collision-converter
+DOO2_CONV_ZDC=1     # zdc-converter
+DOO2_CONV_BC=1      # bc-converter
+DOO2_CONV_TRKEX=1   # tracks-extra-converter
 
 # Selection cuts
 APPLYCUTS_D0=1      # Apply D0 selection cuts.
@@ -185,6 +194,7 @@ function AdjustJson {
     ReplaceString "\"processMc\": \"true\"" "\"processMc\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
     ReplaceString "\"processMC\": \"true\"" "\"processMC\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
     ReplaceString "\"isMC\": \"true\"" "\"isMC\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processData\": \"false\"" "\"processData\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
   fi
 
   # event-selection
@@ -202,10 +212,10 @@ function AdjustJson {
     ReplaceString "\"processNoTrigSel\": \"false\"" "\"processNoTrigSel\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
   fi
 
-  # hf-track-index-skim-creator-tag-sel-tracks, hf-track-index-skim-creator-cascades
-  if [ "$INPUT_RUN" -eq 3 ]; then
-    # do not perform track quality cuts for Run 3 until they are updated
-    ReplaceString "\"doCutQuality\": \"true\"" "\"doCutQuality\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  # hf-track-index-skim-creator-cascades
+  if [[ $DOO2_CAND_CASC -eq 1 || $DOO2_SEL_LCK0SP -eq 1 || $DOO2_TASK_LCK0SP -eq 1 || $DOO2_TREE_LCK0SP -eq 1 ]]; then
+    ReplaceString "\"processCascades\": \"false\"" "\"processCascades\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processNoCascades\": \"true\"" "\"processNoCascades\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
   fi
 
   # timestamp-task
@@ -238,9 +248,13 @@ function AdjustJson {
 
   # tof-event-time
   if [ "$INPUT_RUN" -eq 3 ]; then
-    ReplaceString "\"processNoFT0\": \"false\"" "\"processNoFT0\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
-  else
+    ReplaceString "\"processFT0\": \"false\"" "\"processFT0\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
     ReplaceString "\"processNoFT0\": \"true\"" "\"processNoFT0\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processOnlyFT0\": \"true\"" "\"processOnlyFT0\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  else
+    ReplaceString "\"processFT0\": \"true\"" "\"processFT0\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processNoFT0\": \"true\"" "\"processNoFT0\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processOnlyFT0\": \"true\"" "\"processOnlyFT0\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
   fi
 
   # hf-task-flow
@@ -251,6 +265,37 @@ function AdjustJson {
     ReplaceString "\"processSameRun3\": \"true\"" "\"processSameRun3\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
     ReplaceString "\"processSameRun2\": \"false\"" "\"processSameRun2\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
   fi
+
+  # jet-finder-charged-d0-qa
+  if [ "$INPUT_IS_MC" -eq 1 ]; then
+    ReplaceString "\"processJetsData\": \"true\"" "\"processJetsData\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  else
+    ReplaceString "\"processJetsMCD\": \"true\"" "\"processJetsMCD\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processJetsMCP\": \"true\"" "\"processJetsMCP\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  fi
+
+  # jet-substructure...
+  if [ "$INPUT_IS_MC" -eq 1 ]; then
+    ReplaceString "\"processChargedJetsHF_data\": \"true\"" "\"processChargedJetsHF_data\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processOutput_data\": \"true\"" "\"processOutput_data\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processDummy_data\": \"false\"" "\"processDummy_data\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  else
+    ReplaceString "\"processChargedJetsHF_mcd\": \"true\"" "\"processChargedJetsHF_mcd\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processChargedJetsHFMCP_mcp\": \"true\"" "\"processChargedJetsHFMCP_mcp\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processOutput_mcd\": \"true\"" "\"processOutput_mcd\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processOutput_mcp\": \"true\"" "\"processOutput_mcp\": \"false\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processDummy_mcd\": \"false\"" "\"processDummy_mcd\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
+    ReplaceString "\"processDummy_mcp\": \"false\"" "\"processDummy_mcp\": \"true\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  fi
+  ReplaceString "\"processChargedJetsHF_data\"" "\"processChargedJetsHF\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processChargedJetsHF_mcd\"" "\"processChargedJetsHF\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processChargedJetsHFMCP_mcp\"" "\"processChargedJetsHFMCP\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processOutput_data\"" "\"processOutput\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processOutput_mcd\"" "\"processOutput\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processOutput_mcp\"" "\"processOutput\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processDummy_data\"" "\"processDummy\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processDummy_mcd\"" "\"processDummy\"" "$JSON" || ErrExit "Failed to edit $JSON."
+  ReplaceString "\"processDummy_mcp\"" "\"processDummy\"" "$JSON" || ErrExit "Failed to edit $JSON."
 
   # Enable D0 selection.
   if [ $APPLYCUTS_D0 -eq 1 ]; then
@@ -339,29 +384,19 @@ function MakeScriptO2 {
   SUFFIX_SKIM_MASK="_skimX" # suffix mask to be replaced in the workflow names
   SUFFIX_SKIM="" # the actual suffix to be used instead of the mask
   # Λc → K0S p cascade reconstruction
-  [[ $DOO2_CAND_CASC -eq 1 || $DOO2_SEL_LCK0SP -eq 1 || $DOO2_TASK_LCK0SP -eq 1 ]] && SUFFIX_SKIM+="_v0"
+  [[ $DOO2_CAND_CASC -eq 1 || $DOO2_SEL_LCK0SP -eq 1 || $DOO2_TASK_LCK0SP -eq 1 || $DOO2_TREE_LCK0SP -eq 1 ]] && SUFFIX_SKIM+="_v0"
 
   # Suffix to distinguish versions of the same workflow for different runs in the workflow database
   SUFFIX_RUN_MASK="_runX" # suffix mask to be replaced in the workflow names
   SUFFIX_RUN="_run${INPUT_RUN}" # the actual suffix to be used instead of the mask
 
-  # Suffix to distinguish the candidate creators that do or do not need skim creator in the workflow database
+  # Suffix to distinguish the workflows that run on derived data with parent access (skims)
   SUFFIX_DER_MASK="_derX" # suffix mask to be replaced in the workflow names
   [ "$INPUT_PARENT_MASK" ] && SUFFIX_DER="_derived" || SUFFIX_DER="" # the actual suffix to be used instead of the mask
 
   WORKFLOWS=""
   # Trigger selection
   [ $DOO2_TRIGSEL -eq 1 ] && WORKFLOWS+=" o2-analysis-event-selection"
-  # QA
-  [ $DOO2_REJ_ALICE3 -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-qa-pid-rejection"
-  [ $DOO2_QA_EFF -eq 1 ] && WORKFLOWS+=" o2-analysis-qa-efficiency"
-  [ $DOO2_QA_EVTRK -eq 1 ] && WORKFLOWS+=" o2-analysis-qa-event-track"
-  [ $DOO2_MC_VALID -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-mc-validation"
-  # PID
-  [ $DOO2_PID_TPC -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tpc-full"
-  [ $DOO2_PID_BAYES -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-bayes"
-  [ $DOO2_PID_TOF -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tof-full${SUFFIX_RUN}"
-  [ $DOO2_PID_TOF_QA -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tof-qa-mc"
   # Vertexing
   [ $DOO2_SKIM -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-track-index-skim-creator${SUFFIX_SKIM}"
   [ $DOO2_CAND_2PRONG -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-candidate-creator-2prong${SUFFIX_DER}"
@@ -388,7 +423,7 @@ function MakeScriptO2 {
   [ $DOO2_SEL_XICC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-candidate-selector-xicc-to-p-k-pi-pi"
   [ $DOO2_SEL_B0 -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-candidate-selector-b0-to-d-pi"
   [ $DOO2_SEL_BPLUS -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-candidate-selector-bplus-to-d0-pi"
-  # User tasks
+  # Analysis tasks
   [ $DOO2_TASK_D0 -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-d0"
   [ $DOO2_TASK_JPSI -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-jpsi"
   [ $DOO2_TASK_DS -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-ds"
@@ -402,20 +437,6 @@ function MakeScriptO2 {
   [ $DOO2_TASK_XICC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-xicc"
   [ $DOO2_TASK_B0 -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-b0"
   [ $DOO2_TASK_BPLUS -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-bplus"
-  # Correlations
-  WF_CORR=""
-  [ $DOO2_CORR_D0D0BAR_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar o2-analysis-hf-task-correlation-d-dbar"
-  [ $DOO2_CORR_D0D0BAR_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar-mc-rec o2-analysis-hf-task-correlation-d-dbar-mc-rec"
-  [ $DOO2_CORR_D0D0BAR_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar-mc-gen o2-analysis-hf-task-correlation-d-dbar-mc-gen"
-  [ $DOO2_CORR_DPLUSDMINUS_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus o2-analysis-hf-task-correlation-d-dbar"
-  [ $DOO2_CORR_DPLUSDMINUS_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus-mc-rec o2-analysis-hf-task-correlation-d-dbar-mc-rec"
-  [ $DOO2_CORR_DPLUSDMINUS_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus-mc-gen o2-analysis-hf-task-correlation-d-dbar-mc-gen"
-  [ "$WF_CORR" ] && WORKFLOWS+=" $WF_CORR"
-  [ $DOO2_CORR_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-d0-hadrons"
-  [ $DOO2_CORR_DPLUSHADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-dplus-hadrons"
-  [ $DOO2_CORR_DSHADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-ds-hadrons"
-  [ $DOO2_TASK_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-correlation-d0-hadrons"
-  [ $DOO2_TASK_FLOW -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-flow"
   # Tree creators
   [ $DOO2_TREE_D0 -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-d0-to-k-pi"
   [ $DOO2_TREE_LC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-lc-to-p-k-pi"
@@ -424,11 +445,51 @@ function MakeScriptO2 {
   [ $DOO2_TREE_XICC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-xicc-to-p-k-pi-pi"
   [ $DOO2_TREE_CHIC -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-chic-to-jpsi-gamma"
   [ $DOO2_TREE_BPLUS -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-bplus-to-d0-pi"
+  [ $DOO2_TREE_LCK0SP -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-tree-creator-lc-to-k0s-p"
+  # Correlations
+  WF_CORR=""
+  [ $DOO2_CORR_D0D0BAR_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar o2-analysis-hf-task-correlation-d-dbar"
+  [ $DOO2_CORR_D0D0BAR_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar_mc-rec o2-analysis-hf-task-correlation-d-dbar_mc-rec"
+  [ $DOO2_CORR_D0D0BAR_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-d0-d0bar_mc-gen o2-analysis-hf-task-correlation-d-dbar_mc-gen"
+  [ $DOO2_CORR_DPLUSDMINUS_DATA -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus o2-analysis-hf-task-correlation-d-dbar"
+  [ $DOO2_CORR_DPLUSDMINUS_MCREC -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus_mc-rec o2-analysis-hf-task-correlation-d-dbar_mc-rec"
+  [ $DOO2_CORR_DPLUSDMINUS_MCGEN -eq 1 ] && WF_CORR="o2-analysis-hf-correlator-dplus-dminus_mc-gen o2-analysis-hf-task-correlation-d-dbar_mc-gen"
+  [ "$WF_CORR" ] && WORKFLOWS+=" $WF_CORR"
+  [ $DOO2_CORR_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-d0-hadrons"
+  [ $DOO2_CORR_DPLUSHADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-dplus-hadrons"
+  [ $DOO2_CORR_DSHADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-correlator-ds-hadrons"
+  [ $DOO2_TASK_D0HADRON -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-correlation-d0-hadrons"
+  [ $DOO2_TASK_FLOW -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-flow"
+  # Jets
+  if [ "$INPUT_IS_MC" -eq 1 ]; then
+    [ $DOO2_JET_FIND -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-finder-d0-mcd-charged o2-analysis-je-jet-finder-d0-mcp-charged"
+    [ $DOO2_JET_FIND_QA -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-finder-hf-qa_mc"
+    [ $DOO2_JET_SUB -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-substructure-hf_mcd o2-analysis-je-jet-substructure-hf_mcp"
+    [ $DOO2_JET_SUB_OUT -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-substructure-hf-output_mcd o2-analysis-je-jet-substructure-hf-output_mcp"
+  else
+    [ $DOO2_JET_FIND -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-finder-d0-data-charged"
+    [ $DOO2_JET_FIND_QA -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-finder-hf-qa_data"
+    [ $DOO2_JET_SUB -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-substructure-hf_data"
+    [ $DOO2_JET_SUB_OUT -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-substructure-hf-output_data"
+  fi
+  [ $DOO2_JET_MATCH -eq 1 ] && WORKFLOWS+=" o2-analysis-je-jet-matching"
+  # QA
+  [ $DOO2_REJ_ALICE3 -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-qa-pid-rejection"
+  [ $DOO2_QA_EFF -eq 1 ] && WORKFLOWS+=" o2-analysis-qa-efficiency"
+  [ $DOO2_QA_EVTRK -eq 1 ] && WORKFLOWS+=" o2-analysis-qa-event-track"
+  [ $DOO2_MC_VALID -eq 1 ] && WORKFLOWS+=" o2-analysis-hf-task-mc-validation"
+  # PID
+  [ $DOO2_PID_TPC -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tpc-full"
+  [ $DOO2_PID_BAYES -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-bayes"
+  [ $DOO2_PID_TOF -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tof-full${SUFFIX_RUN}"
+  [ $DOO2_PID_TOF_QA -eq 1 ] && WORKFLOWS+=" o2-analysis-pid-tof-qa-mc"
   # Converters
   [ $DOO2_CONV_MC -eq 1 ] && WORKFLOWS+=" o2-analysis-mc-converter"
   [ $DOO2_CONV_FDD -eq 1 ] && WORKFLOWS+=" o2-analysis-fdd-converter"
   [ $DOO2_CONV_COLL -eq 1 ] && WORKFLOWS+=" o2-analysis-collision-converter"
   [ $DOO2_CONV_ZDC -eq 1 ] && WORKFLOWS+=" o2-analysis-zdc-converter"
+  [ $DOO2_CONV_BC -eq 1 ] && WORKFLOWS+=" o2-analysis-bc-converter"
+  [ $DOO2_CONV_TRKEX -eq 1 ] && WORKFLOWS+=" o2-analysis-tracks-extra-converter"
 
   # Translate options into arguments of the generating script.
   OPT_MAKECMD=""
@@ -463,7 +524,7 @@ EOF
 }
 
 function MakeScriptAli {
-  ALIEXEC="root -b -q -l \"$DIR_TASKS/RunHFTaskLocal.C(\\\"\$FileIn\\\", \\\"\$JSON\\\", $INPUT_IS_MC, $USEO2VERTEXER, $USEALIEVCUTS)\""
+  ALIEXEC="root -b -q -l \"$DIR_TASKS/RunHFTaskLocal.C(\\\"\$FileIn\\\", \\\"\$JSON\\\", $INPUT_IS_MC, $USEO2VERTEXER, $USEALIEVCUTS, $DOO2_JET_FIND, $DOO2_JET_MATCH, $DOO2_JET_SUB)\""
   cat << EOF > "$SCRIPT_ALI"
 #!/bin/bash
 FileIn="\$1"
@@ -486,6 +547,10 @@ function MakeScriptPostprocess {
     [ $DOO2_TASK_LC -eq 1 ] && { OPT_COMPARE+=" lc "; [ "$INPUT_IS_MC" -eq 1 ] && OPT_COMPARE+=" lc-mc-pt  lc-mc-prompt  lc-mc-nonprompt  lc-mc-eta  lc-mc-phi "; }
     [ $DOO2_TASK_XIC -eq 1 ] && OPT_COMPARE+=" xic "
     [ $DOO2_TASK_JPSI -eq 1 ] && OPT_COMPARE+=" jpsi "
+    # Jets
+    [ "$INPUT_IS_MC" -eq 1 ] && SUFFIX_JET="mc" || SUFFIX_JET="data"
+    [ $DOO2_JET_FIND -eq 1 ] && OPT_COMPARE+=" jets-${SUFFIX_JET} "
+    [ $DOO2_JET_SUB -eq 1 ] && OPT_COMPARE+=" jets-substructure-${SUFFIX_JET} "
     [ "$OPT_COMPARE" ] && POSTEXEC+=" && root -b -q -l \"$DIR_TASKS/Compare.C(\\\"\$FileO2\\\", \\\"\$FileAli\\\", \\\"$OPT_COMPARE\\\", $DORATIO)\""
   }
   # Plot particle reconstruction efficiencies.

@@ -25,6 +25,8 @@
         "chi2Max": "0",
         "triggerClassName": "kINT7",
         "useSel8Trigger": "false",
+        "centralityMin": "0",
+        "centralityMax": "100",
         "axisNumContributors": {
             "values": [
                 "200",
@@ -32,6 +34,10 @@
                 "199.5"
             ]
         },
+        "processTrigAndCentFT0ASel": "false",
+        "processTrigAndCentFT0CSel": "false",
+        "processTrigAndCentFT0MSel": "false",
+        "processTrigAndCentFV0ASel": "false",
         "processTrigSel": "false",
         "processNoTrigSel": "true"
     },
@@ -42,7 +48,10 @@
         "debug": "false",
         "doCutQuality": "true",
         "useIsGlobalTrack": "false",
-        "useIsGlobalTrackWoDCA": "false",
+        "useIsGlobalTrackWoDCA": "true",
+        "useIsGlobalTrackForSoftPion": "false",
+        "useIsGlobalTrackWoDCAForSoftPion": "true",
+        "useIsQualityTrackITSForSoftPion": "false",
         "tpcNClsFoundMin": "70",
         "binsPtTrack": {
             "values": [
@@ -133,12 +142,19 @@
                 "-0.5",
                 "0.5"
             ]
-        }
+        },
+        "processNoPid": "true",
+        "processProtonPidTpc": "false",
+        "processProtonPidTof": "false",
+        "processProtonPidTpcOrTof": "false",
+        "processProtonPidTpcAndTof": "false"
     },
     "hf-track-index-skim-creator": {
         "isRun2": "true",
         "do3Prong": "1",
+        "doDstar": "false",
         "debug": "false",
+        "debugPvRefit": "false",
         "fillHistograms": "true",
         "axisNumTracks": {
             "values": [
@@ -299,19 +315,22 @@
                 "massMin",
                 "massMax",
                 "cosp",
-                "decL"
+                "decL",
+                "deltaMassKK"
             ],
             "values": [
                 [
-                    "1.74",
-                    "2.18",
-                    "0.94",
+                    "1.7",
+                    "2.15",
+                    "0.7",
+                    "0.02",
                     "0.02"
                 ],
                 [
-                    "1.74",
-                    "2.18",
-                    "0.94",
+                    "1.7",
+                    "2.15",
+                    "0.5",
+                    "0.02",
                     "0.02"
                 ]
             ]
@@ -376,6 +395,32 @@
                 ]
             ]
         },
+        "binsPtDstarToD0Pi": {
+            "values": [
+                "1",
+                "5",
+                "1000"
+            ]
+        },
+        "cutsDstarToD0Pi": {
+            "labels_rows": "",
+            "labels_cols": [
+                "deltaMassMax",
+                "deltaMassD0"
+            ],
+            "values": [
+                [
+                    "0.17",
+                    "0.05"
+                ],
+                [
+                    "0.17",
+                    "0.08"
+                ]
+            ]
+        },
+        "applyProtonPidForLcToPKPi": "true",
+        "applyProtonPidForXicToPKPi": "true",
         "axisPvRefitDeltaX": {
             "values": [
                 "1000",
@@ -410,11 +455,11 @@
         "minParamChange": "0.001",
         "minRelChi2Change": "0.9",
         "useAbsDCA": "true",
-        "useWeightedFinalPCA": "true",
+        "useWeightedFinalPCA": "false",
         "doCutQuality": "true",
-        "tpcRefitBach": "true",
+        "tpcRefitBach": "false",
         "nCrossedRowsMinBach": "50",
-        "tpcRefitV0Daugh": "true",
+        "tpcRefitV0Daugh": "false",
         "nCrossedRowsMinV0Daugh": "50",
         "etaMinV0Daugh": "-99999",
         "etaMaxV0Daugh": "1.1",
@@ -425,6 +470,7 @@
         "cutInvMassV0": "0.05",
         "ptCascCandMin": "-1",
         "cutInvMassCascLc": "1",
+        "applyProtonPid": "true",
         "ccdbUrl": "http://alice-ccdb.cern.ch",
         "ccdbPathLut": "GLO/Param/MatLUT",
         "ccdbPathGrp": "GLO/GRP/GRP",
@@ -480,8 +526,10 @@
         "ccdbPathLut": "GLO/Param/MatLUT",
         "ccdbPathGrp": "GLO/GRP/GRP",
         "ccdbPathGrpMag": "GLO/Config/GRPMagField",
-        "processPvRefit": "false",
-        "processNoPvRefit": "true"
+        "processPvRefitWithDCAFitterN": "false",
+        "processNoPvRefitWithDCAFitterN": "true",
+        "processPvRefitWithKFParticle": "false",
+        "processNoPvRefitWithKFParticle": "false"
     },
     "hf-candidate-creator-2prong-expressions": {
         "processMc": "true"
@@ -509,7 +557,7 @@
     "hf-candidate-creator-cascade": {
         "propagateToPCA": "true",
         "useAbsDCA": "true",
-        "useWeightedFinalPCA": "true",
+        "useWeightedFinalPCA": "false",
         "maxR": "200",
         "maxDZIni": "4",
         "minParamChange": "0.001",
@@ -919,39 +967,42 @@
                 "d0d0",
                 "cos pointing angle",
                 "cos pointing angle xy",
-                "normalized decay length XY",
-                "decay length",
-                "decay length XY",
-                "minimum decay length"
+                "min norm decay length XY",
+                "max decay length",
+                "max decay length XY",
+                "min decay length",
+                "norm dauImpPar XY"
             ],
             "values": [
-                [ "0.4", "0.035", "0.8", "0.5", "0.5", "0.1", "0.1", "-5.e-5", "0.80", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.035", "0.8", "0.5", "0.5", "0.1", "0.1", "-5.e-5", "0.80", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.4", "0.4", "0.1", "0.1", "-25.e-5", "0.80", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.4", "0.4", "0.1", "0.1", "-25.e-5", "0.80", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-20.e-5", "0.90", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-20.e-5", "0.90", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-12.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-12.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-7.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-7.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.9", "0.7", "0.7", "0.1", "0.1", "-5.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.9", "0.7", "0.7", "0.1", "0.1", "-5.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "0.9", "0.7", "0.7", "0.1", "0.1", "-5.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "10.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06" ],
-                [ "0.4", "0.030", "1", "0.6", "0.6", "0.1", "0.1", "1000.e-5", "0.80", "0", "0", "10", "10", "0.06" ]
+                [ "0.4", "0.035", "0.8", "0.5", "0.5", "0.1", "0.1", "-5.e-5", "0.80", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.035", "0.8", "0.5", "0.5", "0.1", "0.1", "-5.e-5", "0.80", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.4", "0.4", "0.1", "0.1", "-25.e-5", "0.80", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.4", "0.4", "0.1", "0.1", "-25.e-5", "0.80", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-20.e-5", "0.90", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-20.e-5", "0.90", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-12.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-12.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-8.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-7.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.8", "0.7", "0.7", "0.1", "0.1", "-7.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.9", "0.7", "0.7", "0.1", "0.1", "-5.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.9", "0.7", "0.7", "0.1", "0.1", "-5.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "0.9", "0.7", "0.7", "0.1", "0.1", "-5.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "10.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "1", "0.7", "0.7", "0.1", "0.1", "1000.e-5", "0.85", "0", "0", "10", "10", "0.06", "0.5" ],
+                [ "0.4", "0.030", "1", "0.6", "0.6", "0.1", "0.1", "1000.e-5", "0.80", "0", "0", "10", "10", "0.06", "0.5" ]
             ]
-        }
+        },
+        "processWithDCAFitterN": "true",
+        "processWithKFParticle": "false"
     },
     "hf-candidate-selector-dplus-to-pi-k-pi": {
         "ptCandMin": "0",
@@ -2002,7 +2053,10 @@
                 "100"
             ]
         },
-        "processMc": "true"
+        "processWithDCAFitterN": "true",
+        "processWithKFParticle": "false",
+        "processMcWithDCAFitterN": "false",
+        "processMcWithKFParticle": "false"
     },
     "hf-task-dplus": {
         "selectionFlagDplus": "0",
@@ -2301,16 +2355,29 @@
         "checkAmbiguousTracksWithHfEventsOnly": "false"
     },
     "hf-tree-creator-d0-to-k-pi": {
-        "processData": "true",
-        "processMc": "true"
+        "processDataWithDCAFitterN": "true",
+        "processDataWithKFParticle": "false",
+        "processMcWithDCAFitterOnlySig": "false",
+        "processMcWithDCAFitterOnlyBkg": "false",
+        "processMcWithDCAFitterAll": "false",
+        "processMcWithKFParticleOnlySig": "false",
+        "processMcWithKFParticleOnlyBkg": "false",
+        "processMcWithKFParticleAll": "false"
     },
     "hf-tree-creator-lc-to-p-k-pi": {
         "downSampleBkgFactor": "1",
         "processMc": "true",
-        "processData": "true"
+        "processData": "false"
     },
     "hf-tree-creator-bplus-to-d0-pi": {
         "isSignal": "1"
+    },
+    "hf-tree-creator-lc-to-k0s-p": {
+        "fillCandidateLiteTable": "false",
+        "downSampleBkgFactor": "1",
+        "ptMaxForDownSample": "24",
+        "processMc": "true",
+        "processData": "false"
     },
     "hf-task-flow": {
         "zVertexMax": "10",
@@ -2582,7 +2649,7 @@
     },
     "hf-dplus-selection": {
         "selectionFlagDplus": "1",
-        "yCandMax": "0.800000012",
+        "yCandMax": "0.8",
         "ptCandMin": "1",
         "processDplusSelectionData": "true",
         "processDplusSelectionMcRec": "false",
@@ -2591,12 +2658,12 @@
     "hf-correlator-dplus-hadrons": {
         "selectionFlagDplus": "1",
         "applyEfficiency": "1",
-        "yCandMax": "0.800000012",
-        "etaTrackMax": "0.800000012",
+        "yCandMax": "0.8",
+        "etaTrackMax": "0.8",
         "dcaXYTrackMax": "1",
         "dcaZTrackMax": "1",
         "ptCandMin": "1",
-        "ptTrackMin": "0.300000012",
+        "ptTrackMin": "0.3",
         "ptTrackMax": "50",
         "multMin": "0",
         "multMax": "10000",
@@ -2640,12 +2707,243 @@
         "processMcRecMixedEvent": "false",
         "processMcGenMixedEvent": "false"
     },
+    "jet-finder-d0-data-charged": {
+        "vertexZCut": "10",
+        "trackPtMin": "0.15",
+        "trackPtMax": "1000",
+        "trackEtaMin": "-0.9",
+        "trackEtaMax": "0.9",
+        "trackPhiMin": "-999",
+        "trackPhiMax": "999",
+        "trackSelections": "globalTracks",
+        "eventSelections": "sel8",
+        "particleSelections": "PhysicalPrimary",
+        "clusterDefinition": "kV3Default",
+        "clusterEtaMin": "-0.7",
+        "clusterEtaMax": "0.7",
+        "clusterPhiMin": "-999",
+        "clusterPhiMax": "999",
+        "candPtMin": "0",
+        "candPtMax": "100",
+        "candYMin": "-0.8",
+        "candYMax": "0.8",
+        "rejectBackgroundMCCandidates": "true",
+        "selectionFlagD0": "1",
+        "selectionFlagD0bar": "1",
+        "selectionFlagLcToPKPi": "1",
+        "selectionFlagLcToPiPK": "1",
+        "selectionFlagBplus": "1",
+        "jetRadius": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "jetPtMin": "0",
+        "jetPtMax": "1000",
+        "jetEtaMin": "-99",
+        "jetEtaMax": "99",
+        "jetTypeParticleLevel": "1",
+        "jetAlgorithm": "2",
+        "jetRecombScheme": "0",
+        "jetGhostArea": "0.005",
+        "ghostRepeat": "1",
+        "DoRhoAreaSub": "false",
+        "DoConstSub": "false",
+        "processDummy": "false",
+        "processChargedJetsData": "true",
+        "processChargedJetsMCD": "false",
+        "processChargedJetsMCP": "false"
+    },
+    "jet-finder-d0-mcd-charged": {
+        "vertexZCut": "10",
+        "trackPtMin": "0.15",
+        "trackPtMax": "1000",
+        "trackEtaMin": "-0.9",
+        "trackEtaMax": "0.9",
+        "trackPhiMin": "-999",
+        "trackPhiMax": "999",
+        "trackSelections": "globalTracks",
+        "eventSelections": "sel8",
+        "particleSelections": "PhysicalPrimary",
+        "clusterDefinition": "kV3Default",
+        "clusterEtaMin": "-0.7",
+        "clusterEtaMax": "0.7",
+        "clusterPhiMin": "-999",
+        "clusterPhiMax": "999",
+        "candPtMin": "0",
+        "candPtMax": "100",
+        "candYMin": "-0.8",
+        "candYMax": "0.8",
+        "rejectBackgroundMCCandidates": "true",
+        "selectionFlagD0": "1",
+        "selectionFlagD0bar": "1",
+        "selectionFlagLcToPKPi": "1",
+        "selectionFlagLcToPiPK": "1",
+        "selectionFlagBplus": "1",
+        "jetRadius": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "jetPtMin": "0",
+        "jetPtMax": "1000",
+        "jetEtaMin": "-99",
+        "jetEtaMax": "99",
+        "jetTypeParticleLevel": "1",
+        "jetAlgorithm": "2",
+        "jetRecombScheme": "0",
+        "jetGhostArea": "0.005",
+        "ghostRepeat": "1",
+        "DoRhoAreaSub": "false",
+        "DoConstSub": "false",
+        "processDummy": "false",
+        "processChargedJetsData": "false",
+        "processChargedJetsMCD": "true",
+        "processChargedJetsMCP": "false"
+    },
+    "jet-finder-d0-mcp-charged": {
+        "vertexZCut": "10",
+        "trackPtMin": "0.15",
+        "trackPtMax": "1000",
+        "trackEtaMin": "-0.9",
+        "trackEtaMax": "0.9",
+        "trackPhiMin": "-999",
+        "trackPhiMax": "999",
+        "trackSelections": "globalTracks",
+        "eventSelections": "sel8",
+        "particleSelections": "PhysicalPrimary",
+        "clusterDefinition": "kV3Default",
+        "clusterEtaMin": "-0.7",
+        "clusterEtaMax": "0.7",
+        "clusterPhiMin": "-999",
+        "clusterPhiMax": "999",
+        "candPtMin": "0",
+        "candPtMax": "100",
+        "candYMin": "-0.8",
+        "candYMax": "0.8",
+        "rejectBackgroundMCCandidates": "true",
+        "selectionFlagD0": "1",
+        "selectionFlagD0bar": "1",
+        "selectionFlagLcToPKPi": "1",
+        "selectionFlagLcToPiPK": "1",
+        "selectionFlagBplus": "1",
+        "jetRadius": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "jetPtMin": "0",
+        "jetPtMax": "1000",
+        "jetEtaMin": "-99",
+        "jetEtaMax": "99",
+        "jetTypeParticleLevel": "1",
+        "jetAlgorithm": "2",
+        "jetRecombScheme": "0",
+        "jetGhostArea": "0.005",
+        "ghostRepeat": "1",
+        "DoRhoAreaSub": "false",
+        "DoConstSub": "false",
+        "processDummy": "false",
+        "processChargedJetsData": "false",
+        "processChargedJetsMCD": "false",
+        "processChargedJetsMCP": "true"
+    },
+    "jet-finder-charged-d0-qa": {
+        "selectedJetsRadius": "0.4",
+        "vertexZCut": "10",
+        "jetRadii": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "trackEtaMin": "-0.9",
+        "trackEtaMax": "0.9",
+        "trackPtMin": "0.15",
+        "trackPtMax": "100",
+        "trackSelections": "globalTracks",
+        "selectionFlagD0": "1",
+        "selectionFlagD0bar": "1",
+        "selectionFlagLcToPKPi": "1",
+        "selectionFlagLcToPiPK": "1",
+        "selectionFlagBplus": "1",
+        "processDummy": "false",
+        "processJetsData": "true",
+        "processJetsMCD": "true",
+        "processJetsMCDWeighted": "false",
+        "processJetsMCP": "true",
+        "processJetsMCPWeighted": "false",
+        "processJetsMCPMCDMatched": "false",
+        "processJetsMCPMCDMatchedWeighted": "false",
+        "processMCCollisionsWeighted": "false",
+        "processTriggeredData": "false"
+    },
+    "jet-matching-d0-ch": {
+        "doMatchingGeo": "true",
+        "doMatchingPt": "true",
+        "doMatchingHf": "true",
+        "maxMatchingDistance": "0.4",
+        "minPtFraction": "0",
+        "processDummy": "false",
+        "processJets": "true"
+    },
+    "jet-substructure-D0-data": {
+        "zCut": "0.1",
+        "beta": "0",
+        "processDummy_data": "false",
+        "processChargedJetsHF_data": "true",
+        "processChargedJetsHFMCP": "false"
+    },
+    "jet-substructure-D0-mcd": {
+        "zCut": "0.1",
+        "beta": "0",
+        "processDummy_mcd": "false",
+        "processChargedJetsHF_mcd": "true",
+        "processChargedJetsHFMCP": "false"
+    },
+    "jet-substructure-D0-mcp": {
+        "zCut": "0.1",
+        "beta": "0",
+        "processDummy_mcp": "false",
+        "processChargedJetsHF": "false",
+        "processChargedJetsHFMCP_mcp": "true"
+    },
+    "jet-substructure-output-D0-data": {
+        "jetPtMin": "0",
+        "jetRadii": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "processDummy_data": "false",
+        "processOutput_data": "true"
+    },
+    "jet-substructure-output-D0-mcd": {
+        "jetPtMin": "0",
+        "jetRadii": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "processDummy_mcd": "false",
+        "processOutput_mcd": "true"
+    },
+    "jet-substructure-output-D0-mcp": {
+        "jetPtMin": "0",
+        "jetRadii": {
+            "values": [
+                "0.4"
+            ]
+        },
+        "processDummy_mcp": "false",
+        "processOutput_mcp": "true"
+    },
     "collision-converter": {
         "doNotSwap": "false",
         "debug": "false",
         "nbins": "1",
         "tolerance": "0.001"
     },
+    "tracks-extra-converter": "",
     "zdc-converter": "",
     "timestamp-task": {
         "verbose": "false",
@@ -2685,6 +2983,7 @@
         "etaMax": "0.8"
     },
     "track-propagation": {
+        "minPropagationDistance": "5",
         "processStandard": "false",
         "processCovariance": "true"
     },
