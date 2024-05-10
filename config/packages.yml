@@ -28,6 +28,10 @@ repositories:
     update: 1
     origin: "origin"
 
+  ali-bot:
+    update: 1
+    origin: "origin"
+
   AliPhysics:
     update: 1
     build: 1
