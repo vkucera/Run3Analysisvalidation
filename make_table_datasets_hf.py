@@ -87,10 +87,7 @@ def main():
             if any(is_url):
                 ds["jira"] = words[is_url.index(True)].split(r"\n")[0].strip()
         # Format the table row.
-        line = ""
-        for key in fields_selected:
-            line += f"{ds[key]};"
-        line = line[:-1]
+        line = ";".join([f"{ds[key]}" for key in fields_selected])
         # Add the line in the list.
         ds_lists[ds["collision_system"]][ds["parent_dataset_production_type"]].append(line)
 
