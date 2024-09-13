@@ -29,17 +29,17 @@ def main():
 
     # Dataset properties and their titles in the table header
     fields = {
-        "parent_dataset_production_type" : "parent_dataset_production_type",
-        "parent_dataset_name" : "Parent dataset",
-        "parent_dataset_link" : "Hyperloop link to parent dataset",
-        "dataset_id" : "dataset_id",
-        "name" : "Derived dataset",
-        "collision_system" : "collision_system",
-        "dataset_link" : "Hyperloop link to derived dataset",
-        "production_train" : "Production train",
-        "parent_dataset_description" : "parent_dataset_description",
-        "content" : "Content of derived data",
-        "jira" : "JIRA",
+        "parent_dataset_production_type": "parent_dataset_production_type",
+        "parent_dataset_name": "Parent dataset",
+        "parent_dataset_link": "Hyperloop link to parent dataset",
+        "dataset_id": "dataset_id",
+        "name": "Derived dataset",
+        "collision_system": "collision_system",
+        "dataset_link": "Hyperloop link to derived dataset",
+        "production_train": "Production train",
+        "parent_dataset_description": "parent_dataset_description",
+        "content": "Content of derived data",
+        "jira": "JIRA",
     }
 
     # Selected properties to print in the table
